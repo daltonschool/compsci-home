@@ -8,6 +8,7 @@ meteor-platform
 insecure
 coffeescript
 jquery
+bootstrap
 accounts-base
 accounts-password
 alanning:roles
@@ -15,5 +16,6 @@ accounts-ui
 iron:router
 markdown
 underscore
+reywood:bootstrap3-sass
 mrt:bootstrap-3
 tsega:bootstrap3-datetimepicker
