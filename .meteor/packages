@@ -9,7 +9,6 @@ insecure
 coffeescript
 jquery
 bootstrap
-aldeed:autoform
 accounts-base
 accounts-password
 alanning:roles
