@@ -1,0 +1,48 @@
+<template name="assignments">
+  <a href="/assignments/new">New Assignment</a>
+  <ul>
+    {{#each assignments}}
+      <li><a href="/assignments/{{url}}">{{name}}</a></li>
+    {{/each}}
+  </ul>
+
+</template>
+
+<template name="newAssignment">
+  <form class="new-assignment">
+    <label>
+      Name of Assignment
+      <input type="text" name="name">
+    </label>
+    <br>
+    <label>
+      Levels (separated by comma)
+      <input type="text" name="levels">
+    </label>
+    <br>
+    <textarea name="text"></textarea>
+    <input type="submit">
+  </form>
+</template>
+
+<template name="editAssignment">
+  <form class="edit-assignment">
+    <label>
+      Name:
+    </label>
+    <input type="text" name="name" value="{{name}}" readonly>
+    <br>
+    <label>
+      Levels:
+    </label>
+    <input type="text" name="levels" value="{{join levels}}">
+    <br>
+    <textarea name="text">{{trim content}}</textarea>
+    <input type="submit">
+  </form>
+</template>
+
+<template name="assignment">
+  <a href="edit/{{url}}">Edit Assignment</a>
+  {{#markdown}}{{content}}{{/markdown}}
+</template>
