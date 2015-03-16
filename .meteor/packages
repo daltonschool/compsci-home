@@ -15,3 +15,6 @@ accounts-password
 alanning:roles
 underscore
 accounts-ui
+iron:router
+markdown
+underscore
