@@ -16,3 +16,4 @@ iron:router
 markdown
 underscore
 mrt:bootstrap-3
+tsega:bootstrap3-datetimepicker
