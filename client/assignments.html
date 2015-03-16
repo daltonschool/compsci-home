@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
+<head>
   <title></title>
 </head>
 <body>
-
 </body>
-</html>
+
+<template name="assignments">
+    <a href="/assignments/new">New Assignment</a>
+    <ul>
+        {{#each assignments}}
+            <li><a href="/assignments/{{url}}">{{name}}</a></li>
+        {{/each}}
+    </ul>
+
+</template>
+
+<template name="newAssignment">
+    <form class="new-assignment">
+        <label>
+            Name of Assignment
+        </label>
+        <input type="text" name="name">
+        <br>
+        <label>
+            Levels (separated by comma)
+        </label>
+        <input type="text" name="levels">
+        <br>
+        <textarea name="text"></textarea>
+        <input type="submit">
+    </form>
+</template>
+
+<template name="assignment">
+    {{#markdown}}
+        {{content}}
+    {{/markdown}}
+</template>
