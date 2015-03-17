@@ -39,7 +39,6 @@
 </template>
 
 <template name="editAssignment">
-  <button class="btn btn-danger delete" id="{{_id}}">Delete Assignment</button>
   <form class="edit-assignment">
     <label>
       Name:
@@ -52,11 +51,18 @@
     <input type="text" name="levels" value="{{join levels}}">
     <br>
     <textarea name="text">{{trim content}}</textarea>
-    <input type="submit">
+    <br>
+    <input type="submit" class="btn btn-primary">
+    <button class="btn btn-danger delete" id="{{_id}}">Delete Assignment</button>
+
   </form>
 </template>
 
 <template name="assignment">
   <a href="edit/{{url}}">Edit Assignment</a>
-  {{#markdown}}{{content}}{{/markdown}}
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      {{#markdown}}{{content}}{{/markdown}}
+    </div>
+  </div>
 </template>
