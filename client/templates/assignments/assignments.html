@@ -1,11 +1,32 @@
 <template name="assignments">
-
   <div class="row">
     <div class="col-md-11">
-      <table class="table table-hover">
+      {{#if isInRole 'admin'}}
+      <div id="items">
+        {{#each assignments}}
+          <div class="item">
+            <a href="/assignments/{{url}}">{{name}}</a>
+          </div>
+        {{/each}}
+      </div>
+      {{else}}
+      <table class="table">
+        <thead>
+        <tr>
+          <td>
+            #
+          </td>
+          <td>
+            Assignment
+          </td>
+        </tr>
+        </thead>
         <tbody>
         {{#each assignments}}
           <tr>
+            <td>
+
+            </td>
             <td>
               <a href="/assignments/{{url}}">{{name}}</a>
             </td>
@@ -13,6 +34,7 @@
         {{/each}}
         </tbody>
       </table>
+      {{/if}}
     </div>
     <div class="col-md-1">
       <a href="/assignments/new">New Assignment</a>
@@ -50,11 +72,16 @@
     </label>
     <input type="text" name="levels" value="{{join levels}}">
     <br>
-    <textarea name="text">{{trim content}}</textarea>
-    <br>
-    <input type="submit" class="btn btn-primary">
-    <button class="btn btn-danger delete" id="{{_id}}">Delete Assignment</button>
-
+    <div class="row">
+      <div class="col-md-6">
+        <textarea name="text">{{trim content}}</textarea>
+        <input type="submit" class="btn btn-primary">
+        <button class="btn btn-danger delete" id="{{_id}}">Delete Assignment</button>
+      </div>
+      <div class="col-md-6" id="preview">
+        {{#markdown}}{{/markdown}}
+      </div>
+    </div>
   </form>
 </template>
 
