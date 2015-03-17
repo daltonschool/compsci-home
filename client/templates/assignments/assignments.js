@@ -79,19 +79,7 @@ Template.editAssignment.helpers({
   }
 });
 
-Template.editAssignment.events({
-  'submit .edit-assignment': function(e) {
-    var a = Assignments.findOne({name: e.target.name.value});
-    Assignments.update(a._id, {
-      $set: {content: e.target.text.value.trim(), levels: e.target.levels.value.split(/, /)}
-    });
-    Router.go("/assignments/"+ a.url);
-    return false;
-  },
-  'click .delete': function(e) {
-    Assignments.remove(e.target.id);
-    Router.go("/assignments");
-  },
+Template.body.events({
   'keydown textarea': function(e) {
     var keyCode = e.keyCode || e.which;
     if (keyCode == 9) {
@@ -106,5 +94,20 @@ Template.editAssignment.events({
       e.target.selectionStart =
         e.target.selectionEnd = start + 1;
     }
+  }
+});
+
+Template.editAssignment.events({
+  'submit .edit-assignment': function(e) {
+    var a = Assignments.findOne({name: e.target.name.value});
+    Assignments.update(a._id, {
+      $set: {content: e.target.text.value.trim(), levels: e.target.levels.value.split(/, /)}
+    });
+    Router.go("/assignments/"+ a.url);
+    return false;
+  },
+  'click .delete': function(e) {
+    Assignments.remove(e.target.id);
+    Router.go("/assignments");
   }
 });
