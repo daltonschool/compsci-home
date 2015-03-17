@@ -4,12 +4,14 @@ accounts-ui@1.1.4
 accounts-ui-unstyled@1.1.6
 alanning:roles@1.2.13
 application-configuration@1.0.4
+autopublish@1.0.2
 autoupdate@1.1.5
 base64@1.0.2
 binary-heap@1.0.2
 blaze@2.0.4
 blaze-tools@1.0.2
 boilerplate-generator@1.0.2
+bootstrap@1.0.1
 callback-hook@1.0.2
 check@1.0.4
 coffeescript@1.0.5
