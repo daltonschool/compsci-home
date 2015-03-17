@@ -16,7 +16,7 @@
               <a href="#" class="course" id="{{name}}">{{name}}</a>
             </td>
             <td>
-              <button class="btn btn-link remove" id="{{name}}">&times;</button>
+              <a href="#" class="btn btn-link remove" id="{{name}}">&times;</a>
             </td>
           </tr>
         {{/each}}
@@ -37,7 +37,7 @@
         <h3>Current Students</h3>
         <ul>
           {{#each students}}
-            <li>{{username}} <button class="btn btn-link del student" id="{{username}}">&times;</button></li>
+            <li>{{username}} <a href="#" class="btn btn-link del student" id="{{username}}">&times;</a></li>
           {{/each}}
         </ul>
 
