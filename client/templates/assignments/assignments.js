@@ -43,5 +43,20 @@ Template.editAssignment.events({
   'click .delete': function(e) {
     Assignments.remove(e.target.id);
     Router.go("/assignments");
+  },
+  'keydown textarea': function(e) {
+    var keyCode = e.keyCode || e.which;
+    if (keyCode == 9) {
+      e.preventDefault();
+      var start = e.target.selectionStart;
+      var end = e.target.selectionEnd;
+      // set textarea value to: text before caret + tab + text after caret
+      e.target.value = e.target.value.substring(0, start)
+      + '\t'
+      + e.target.value.substring(end);
+      // put caret at right position again
+      e.target.selectionStart =
+        e.target.selectionEnd = start + 1;
+    }
   }
 });
