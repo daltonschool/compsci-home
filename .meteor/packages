@@ -20,3 +20,4 @@ mrt:bootstrap-3
 tsega:bootstrap3-datetimepicker
 autopublish
 twbs:bootstrap
+simple:highlight.js
