@@ -1,10 +1,35 @@
 <template name="adminPanel">
   <div class="row">
     <div class="col-md-6">
-
+      <h2>Manage Courses</h2>
+      <form>
+      <table class="table">
+        <thead>
+        <tr>
+          <td>Course Name</td>
+          <td>Course Level</td>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each courses}}
+          <tr>
+            <td>
+              {{name}}
+            </td>
+            <td>
+              {{level}}
+            </td>
+          </tr>
+        {{/each}}
+        <tr>
+            <td><input type="text" name="courseName" placeholder="Course Name"></td>
+            <td><input type="number" name="courseLevel" min="1"></td>
+        </tr>
+        </tbody>
+      </table>
+      </form>
     </div>
     <div class="col-md-6">
-      
     </div>
   </div>
 </template>
