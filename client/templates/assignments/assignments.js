@@ -8,11 +8,15 @@ Template.assignments.helpers({
     return Assignments.find({}, {sort: {rank: 1}});
   }
 });
+Template.adminAssignments.helpers({
+  'assignments': function() {
+    return Assignments.find({}, {sort: {rank: 1}});
+  }
+});
 
-Template.assignments.rendered = function() {
+Template.adminAssignments.rendered = function() {
   this.$('#items').sortable({
     stop: function(e, ui) {
-      console.log("hi");
       // get the dragged html element and the one before
       //   and after it
       el = ui.item.get(0)
@@ -55,7 +59,6 @@ Template.newAssignment.events({
       var a = Assignments.find({}, {sort: {rank: -1}}).fetch();
       if (a)
         rank = a.rank || 0;
-
       Assignments.insert({
         name: e.target.name.value,
         url: url,

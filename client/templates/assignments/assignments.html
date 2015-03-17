@@ -1,14 +1,20 @@
+<template name="adminPanel">
+  <div class="row">
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-6">
+      
+    </div>
+  </div>
+</template>
+
+
 <template name="assignments">
   <div class="row">
     <div class="col-md-11">
       {{#if isInRole 'admin'}}
-      <div id="items">
-        {{#each assignments}}
-          <div class="item">
-            <a href="/assignments/{{url}}">{{name}}</a>
-          </div>
-        {{/each}}
-      </div>
+      {{> adminAssignments}}
       {{else}}
       <table class="table">
         <thead>
@@ -37,10 +43,22 @@
       {{/if}}
     </div>
     <div class="col-md-1">
+      {{#if isInRole 'admin'}}
       <a href="/assignments/new">New Assignment</a>
+      {{/if}}
     </div>
   </div>
 
+</template>
+
+<template name="adminAssignments">
+  <div id="items">
+    {{#each assignments}}
+      <div class="item">
+        <a href="/assignments/{{url}}">{{name}}</a>
+      </div>
+    {{/each}}
+  </div>
 </template>
 
 <template name="newAssignment">
