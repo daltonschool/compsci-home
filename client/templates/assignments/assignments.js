@@ -1,6 +1,52 @@
 /**
  * Created by davis on 3/16/15.
  */
+
+
+Template.assignments.helpers({
+  'assignments': function() {
+    return Assignments.find({}, {sort: {rank: 1}});
+  }
+});
+Template.adminAssignments.helpers({
+  'assignments': function() {
+    return Assignments.find({}, {sort: {rank: 1}});
+  }
+});
+
+Template.adminAssignments.rendered = function() {
+  this.$('#items').sortable({
+    stop: function(e, ui) {
+      // get the dragged html element and the one before
+      //   and after it
+      el = ui.item.get(0)
+      before = ui.item.prev().get(0)
+      after = ui.item.next().get(0)
+
+      // Here is the part that blew my mind!
+      //  Blaze.getData takes as a parameter an html element
+      //    and will return the data context that was bound when
+      //    that html element was rendered!
+      if(!before) {
+        //if it was dragged into the first position grab the
+        // next element's data context and subtract one from the rank
+        newRank = Blaze.getData(after).rank - 1
+      } else if(!after) {
+        //if it was dragged into the last position grab the
+        //  previous element's data context and add one to the rank
+        newRank = Blaze.getData(before).rank + 1
+      }
+      else
+      //else take the average of the two ranks of the previous
+      // and next elements
+        newRank = (Blaze.getData(after).rank + Blaze.getData(before).rank)/2
+
+      //update the dragged Item's rank
+      Assignments.update({_id: Blaze.getData(el)._id}, {$set: {rank: newRank}})
+    }
+  })
+};
+
 Template.newAssignment.events({
   "submit .new-assignment": function(e) {
     e.preventDefault();
@@ -9,12 +55,17 @@ Template.newAssignment.events({
     if (Assignments.findOne({name: e.target.name.value})) {
       // don't create a new assignment, possibly send an error
     } else {
+      var rank = -1;
+      var a = Assignments.find({}, {sort: {rank: -1}}).fetch();
+      if (a)
+        rank = a.rank || 0;
       Assignments.insert({
         name: e.target.name.value,
         url: url,
         content: e.target.text.value.trim(),
         levels: levels,
-        dateCreated: new Date()
+        dateCreated: new Date(),
+        rank: rank+1
       });
     }
     Router.go("/assignments/"+ url);
@@ -31,6 +82,22 @@ Template.editAssignment.helpers({
   }
 });
 
+function textareaTab(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode == 9) {
+    e.preventDefault();
+    var start = e.target.selectionStart;
+    var end = e.target.selectionEnd;
+    // set textarea value to: text before caret + tab + text after caret
+    e.target.value = e.target.value.substring(0, start)
+    + '\t'
+    + e.target.value.substring(end);
+    // put caret at right position again
+    e.target.selectionStart =
+      e.target.selectionEnd = start + 1;
+  }
+}
+
 Template.editAssignment.events({
   'submit .edit-assignment': function(e) {
     var a = Assignments.findOne({name: e.target.name.value});
@@ -44,19 +111,9 @@ Template.editAssignment.events({
     Assignments.remove(e.target.id);
     Router.go("/assignments");
   },
-  'keydown textarea': function(e) {
-    var keyCode = e.keyCode || e.which;
-    if (keyCode == 9) {
-      e.preventDefault();
-      var start = e.target.selectionStart;
-      var end = e.target.selectionEnd;
-      // set textarea value to: text before caret + tab + text after caret
-      e.target.value = e.target.value.substring(0, start)
-      + '\t'
-      + e.target.value.substring(end);
-      // put caret at right position again
-      e.target.selectionStart =
-        e.target.selectionEnd = start + 1;
-    }
-  }
+  'keydown textarea': textareaTab
+});
+
+Template.newAssignment.events({
+  'keydown textarea': textareaTab
 });

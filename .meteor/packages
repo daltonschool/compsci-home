@@ -19,5 +19,7 @@ mrt:bootstrap-3
 tsega:bootstrap3-datetimepicker
 twbs:bootstrap
 simple:highlight.js
+mizzao:jquery-ui
 ian:accounts-ui-bootstrap-3
 mrt:bootstrap-alerts
+autopublish
