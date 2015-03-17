@@ -79,23 +79,21 @@ Template.editAssignment.helpers({
   }
 });
 
-Template.body.events({
-  'keydown textarea': function(e) {
-    var keyCode = e.keyCode || e.which;
-    if (keyCode == 9) {
-      e.preventDefault();
-      var start = e.target.selectionStart;
-      var end = e.target.selectionEnd;
-      // set textarea value to: text before caret + tab + text after caret
-      e.target.value = e.target.value.substring(0, start)
-      + '\t'
-      + e.target.value.substring(end);
-      // put caret at right position again
-      e.target.selectionStart =
-        e.target.selectionEnd = start + 1;
-    }
+function textareaTab(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode == 9) {
+    e.preventDefault();
+    var start = e.target.selectionStart;
+    var end = e.target.selectionEnd;
+    // set textarea value to: text before caret + tab + text after caret
+    e.target.value = e.target.value.substring(0, start)
+    + '\t'
+    + e.target.value.substring(end);
+    // put caret at right position again
+    e.target.selectionStart =
+      e.target.selectionEnd = start + 1;
   }
-});
+}
 
 Template.editAssignment.events({
   'submit .edit-assignment': function(e) {
@@ -109,5 +107,10 @@ Template.editAssignment.events({
   'click .delete': function(e) {
     Assignments.remove(e.target.id);
     Router.go("/assignments");
-  }
+  },
+  'keydown textarea': textareaTab
+});
+
+Template.newAssignment.events({
+  'keydown textarea': textareaTab
 });
