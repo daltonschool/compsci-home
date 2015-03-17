@@ -34,13 +34,11 @@ Template.editAssignment.helpers({
 Template.editAssignment.events({
   'submit .edit-assignment': function(e) {
     console.log("click!");
-    e.preventDefault();
     //if (e.target.text.value !== '\n') // make sure there's still a space at the beginning.
     //  e.target.text.value = '\n'+e.target.text.value;
     var a = Assignments.findOne({name: e.target.name.value});
-    console.log(a);
     Assignments.update(a._id, {
-      $set: {content: e.target.text.value.trim()}
+      $set: {content: e.target.text.value.trim(), levels: e.target.levels.value.split(/, /)}
     });
     Router.go("/assignments/"+ a.url);
     return false;
