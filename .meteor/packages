@@ -8,7 +8,6 @@ meteor-platform
 insecure
 coffeescript
 jquery
-bootstrap
 accounts-base
 accounts-password
 alanning:roles
@@ -20,3 +19,4 @@ reywood:bootstrap3-sass
 mrt:bootstrap-3
 tsega:bootstrap3-datetimepicker
 autopublish
+twbs:bootstrap
