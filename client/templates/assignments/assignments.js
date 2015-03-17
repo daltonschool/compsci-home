@@ -3,6 +3,8 @@
  */
 
 
+Session.setDefault("course", undefined);
+
 Template.assignments.helpers({
   'assignments': function() {
     return Assignments.find({}, {sort: {rank: 1}});
@@ -11,6 +13,57 @@ Template.assignments.helpers({
 Template.adminAssignments.helpers({
   'assignments': function() {
     return Assignments.find({}, {sort: {rank: 1}});
+  }
+});
+
+Template.adminPanel.helpers({
+  'courses': function() {
+    return Courses.find({});
+  },
+  'course': function() {
+    if (Session.get("course"))
+      return Courses.findOne(Session.get("course")).name || '';
+    else
+      return '';
+  },
+  'students': function() {
+    return Courses.findOne(Session.get("course")).students;
+  }
+});
+Template.adminPanel.events({
+  "submit #addCourse": function(e) {
+    e.preventDefault();
+    if (Courses.findOne({name: e.target.courseName.value})) {
+
+    } else {
+      Courses.insert({
+        name: e.target.courseName.value,
+        students: []
+      });
+    }
+    e.target.courseName.value = "";
+    return false;
+  },
+  "submit #addStudents": function(e) {
+    e.preventDefault();
+
+    var students = e.target.students.value.split(/, ?/);
+    var d = [];
+    for (var i = 0; i < students.length; i++) {
+      d.push({username: students[i]});
+    }
+    Courses.update(Session.get("course"), {$addToSet: {students: {$each: d}}})
+
+    return false;
+  },
+  "click .remove": function(e) {
+    Courses.remove(Courses.findOne({name: e.target.id})._id);
+  },
+  "click a.course": function(e) {
+    Session.set("course", Courses.findOne({name: e.target.id})._id);
+  },
+  "click .del": function(e) {
+    Courses.update(Session.get("course"), {$pull: {students: {username: e.target.id}}})
   }
 });
 

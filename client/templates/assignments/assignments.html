@@ -2,34 +2,54 @@
   <div class="row">
     <div class="col-md-6">
       <h2>Manage Courses</h2>
-      <form>
+      <form id="addCourse">
       <table class="table">
         <thead>
         <tr>
           <td>Course Name</td>
-          <td>Course Level</td>
         </tr>
         </thead>
         <tbody>
         {{#each courses}}
           <tr>
             <td>
-              {{name}}
+              <a href="#" class="course" id="{{name}}">{{name}}</a>
             </td>
             <td>
-              {{level}}
+              <button class="btn btn-link remove" id="{{name}}">&times;</button>
             </td>
           </tr>
         {{/each}}
         <tr>
-            <td><input type="text" name="courseName" placeholder="Course Name"></td>
-            <td><input type="number" name="courseLevel" min="1"></td>
+          <td>
+            <input type="text" name="courseName" placeholder="Course Name">
+            <input type="submit" class="btn btn-default btn-xs">
+          </td>
         </tr>
         </tbody>
       </table>
       </form>
     </div>
     <div class="col-md-6">
+      <h1>{{course}}</h1>
+      {{#if course}}
+
+        <h3>Current Students</h3>
+        <ul>
+          {{#each students}}
+            <li>{{username}} <button class="btn btn-link del student" id="{{username}}">&times;</button></li>
+          {{/each}}
+        </ul>
+
+        <form id="addStudents">
+          <label>
+            Add Students
+          </label>
+          <input type="text" name="students">
+          <br>
+          <input type="submit">
+        </form>
+      {{/if}}
     </div>
   </div>
 </template>

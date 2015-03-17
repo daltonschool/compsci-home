@@ -7,4 +7,8 @@ Meteor.startup(function() {
   if (u) {
     Roles.addUsersToRoles(u._id, 'admin');
   }
+  var c = Meteor.users.findOne({username: "cforster"});
+  if (c) {
+    Roles.addUsersToRoles(c._id, 'admin');
+  }
 });
