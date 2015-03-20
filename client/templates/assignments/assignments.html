@@ -35,20 +35,48 @@
       {{#if course}}
 
         <h3>Current Students</h3>
-        <ul>
+        <ul style="list-style-type: none;">
           {{#each students}}
-            <li>{{username}} <a href="#" class="btn btn-link del student" id="{{username}}">&times;</a></li>
+            <li style="list-style-type: none;">
+              <a href="#" class="btn btn-link del student" id="{{username}}">&times;</a> {{username}}
+            </li>
           {{/each}}
         </ul>
-
         <form id="addStudents">
           <label>
             Add Students
           </label>
           <input type="text" name="students">
-          <br>
-          <input type="submit">
+          <input class="btn btn-xs btn-default" type="submit">
         </form>
+        <h3>Assignments</h3>
+        <table class="table">
+          <thead>
+          <tr>
+            <td>Unassigned</td>
+            <td>Assigned</td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              <ul>
+                {{#each unassigned}}
+                  <li>{{name}} <button id="{{_id}}" class="btn btn-xs btn-link assign">+</button></li>
+                {{/each}}
+              </ul>
+            </td>
+            <td>
+              <ol>
+                {{#each assigned}}
+                  <li>{{name}} <button id="{{_id}}" class="btn btn-xs btn-link unassign">&times;</button></li>
+                {{/each}}
+              </ol>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
       {{/if}}
     </div>
   </div>
@@ -56,7 +84,7 @@
 
 <template name="assignments">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-4 col-md-offset-2">
       {{#if edit}}
       {{> adminAssignments}}
       {{else}}
@@ -71,7 +99,7 @@
     </div>
     <div class="col-md-2">
       {{#if isInRole 'admin'}}
-        <a class="btn btn-success" href="/assignments/new">New Assignment</a>
+        <a class="btn btn-success" href="/assignments/new">New Assignment</a> <br>
         <button class="btn btn-default" id="edit">{{#if edit}}Save Order{{else}}Change Order{{/if}}</button>
       {{/if}}
     </div>
