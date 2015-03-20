@@ -41,20 +41,22 @@ Template.adminPanel.helpers({
     return Courses.findOne(Session.get("course")).students;
   },
   'unassigned': function() {
-    var a = Courses.findOne(Session.get("course")).assignments;
-    var assigned = [];
-    for (var i=0; i < a.length; i++)
-      assigned[i] = a[i].id;
+    /*
+     * Return all assignments whose IDs are not in the array of assigned assignments.
+     */
+    var assigned = Courses.findOne(Session.get("course")).assignments;
     return Assignments.find({_id: {$nin: assigned}});
   },
   'assigned': function() {
+    /*
+     * Return all assignments that are in the assigned array.
+     * We don't do the query like above because we need the order to stay the same.
+     * That's why we build up the array object-by-object using findOne.
+     */
     var a = Courses.findOne(Session.get("course")).assignments;
-    a.sort(function(a,b) {
-      return a.dateAssigned - b.dateAssigned;
-    });
     var assigned = [];
     for (var i=0; i < a.length; i++)
-      assigned[i] = Assignments.findOne(a[i].id);
+      assigned[i] = Assignments.findOne(a[i]);
     return assigned;
   }
 });
@@ -95,10 +97,10 @@ Template.adminPanel.events({
     Courses.update(Session.get("course"), {$pull: {students: {username: e.target.id}}})
   },
   'click .assign': function(e) {
-    Courses.update(Session.get("course"), {$addToSet: {assignments: {id: e.target.id, dateAssigned: new Date()}}});
+    Courses.update(Session.get("course"), {$addToSet: {assignments: e.target.id}});
   },
   'click .unassign': function(e) {
-    Courses.update(Session.get('course'), {$pull: {assignments: {id: e.target.id}}});
+    Courses.update(Session.get('course'), {$pull: {assignments: e.target.id}});
   }
 });
 
