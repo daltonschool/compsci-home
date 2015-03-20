@@ -4,10 +4,21 @@
 
 
 Session.setDefault("course", undefined);
-
+Session.setDefault("edit", false);
 Template.assignments.helpers({
   'assignments': function() {
     return Assignments.find({}, {sort: {rank: 1}});
+  },
+  'edit': function() {
+    if (Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      return Session.get("edit");
+    }
+    return false;
+  }
+});
+Template.assignments.events({
+  'click #edit': function(e) {
+    Session.set('edit', !Session.get('edit'));
   }
 });
 Template.adminAssignments.helpers({
