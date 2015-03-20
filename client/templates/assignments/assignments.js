@@ -41,13 +41,21 @@ Template.adminPanel.helpers({
     return Courses.findOne(Session.get("course")).students;
   },
   'unassigned': function() {
-    var assigned = Courses.findOne(Session.get("course")).assignments;
-    console.log(assigned);
+    var a = Courses.findOne(Session.get("course")).assignments;
+    var assigned = [];
+    for (var i=0; i < a.length; i++)
+      assigned[i] = a[i].id;
     return Assignments.find({_id: {$nin: assigned}});
   },
   'assigned': function() {
-    var assigned = Courses.findOne(Session.get("course")).assignments;
-    return Assignments.find({_id: {$in: assigned}});
+    var a = Courses.findOne(Session.get("course")).assignments;
+    a.sort(function(a,b) {
+      return a.dateAssigned - b.dateAssigned;
+    });
+    var assigned = [];
+    for (var i=0; i < a.length; i++)
+      assigned[i] = Assignments.findOne(a[i].id);
+    return assigned;
   }
 });
 Template.adminPanel.events({
@@ -87,10 +95,10 @@ Template.adminPanel.events({
     Courses.update(Session.get("course"), {$pull: {students: {username: e.target.id}}})
   },
   'click .assign': function(e) {
-    Courses.update(Session.get("course"), {$addToSet: {assignments: e.target.id}});
+    Courses.update(Session.get("course"), {$addToSet: {assignments: {id: e.target.id, dateAssigned: new Date()}}});
   },
   'click .unassign': function(e) {
-    Courses.update(Session.get('course'), {$pull: {assignments: e.target.id}});
+    Courses.update(Session.get('course'), {$pull: {assignments: {id: e.target.id}}});
   }
 });
 

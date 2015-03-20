@@ -59,14 +59,14 @@
           </thead>
           <tbody>
           <tr>
-            <td>
+            <td width="50%">
               <ul>
                 {{#each unassigned}}
                   <li>{{name}} <button id="{{_id}}" class="btn btn-xs btn-link assign">+</button></li>
                 {{/each}}
               </ul>
             </td>
-            <td>
+            <td width="50%">
               <ol>
                 {{#each assigned}}
                   <li>{{name}} <button id="{{_id}}" class="btn btn-xs btn-link unassign">&times;</button></li>
