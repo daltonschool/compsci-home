@@ -9,7 +9,19 @@ Session.setDefault("course", undefined);
 Session.setDefault("edit", false);
 Template.assignments.helpers({
   'assignments': function() {
-    return Assignments.find({}, {sort: {rank: 1}});
+    var c = Courses.find().fetch();
+    var inThere = {};
+    var assnmnts = [];
+    for (var i=0;i< c.length;i++) {
+      for (var j=0;j<c[i].assignments.length;j++){
+        if (!inThere[c[i].assignments[j]]) {
+          assnmnts.push(Assignments.findOne(c[i].assignments[j]))
+          inThere[c[i].assignments[j]] = true;
+        }
+      }
+    }
+
+    return assnmnts;
   },
   'edit': function() {
     if (Roles.userIsInRole(Meteor.userId(), 'admin')) {

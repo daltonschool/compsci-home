@@ -21,4 +21,7 @@ Meteor.publish('courses', function() {
   // only give access to course list if they're an admin.
   if (Roles.userIsInRole(this.userId, 'admin'))
     return Courses.find({});
+  else {
+    return Courses.find({students: {username: Meteor.users.findOne(this.userId).username}});
+  }
 });
