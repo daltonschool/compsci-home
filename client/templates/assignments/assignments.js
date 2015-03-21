@@ -2,6 +2,8 @@
  * Created by davis on 3/16/15.
  */
 
+Meteor.subscribe("assignments");
+Meteor.subscribe("courses");
 
 Session.setDefault("course", undefined);
 Session.setDefault("edit", false);
