@@ -49,7 +49,7 @@ Template.adminPanel.helpers({
      * Return all assignments whose IDs are not in the array of assigned assignments.
      */
     var assigned = Courses.findOne(Session.get("course")).assignments;
-    return Assignments.find({_id: {$nin: assigned}});
+    return Assignments.find({_id: {$nin: assigned}}, {sort: {dateCreated: 1}});
   },
   'assigned': function() {
     /*
