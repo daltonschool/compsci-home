@@ -14,6 +14,8 @@ Meteor.publish('assignments', function() {
       }
       return Assignments.find({_id: {$in: a}}); // return all of those objects.
     }
+    else
+      return [];
   }
 });
 
@@ -24,5 +26,7 @@ Meteor.publish('courses', function() {
   else {
     if (this.userId)
       return Courses.find({students: {username: Meteor.users.findOne(this.userId).username}});
+    else
+      return [];
   }
 });
