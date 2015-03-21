@@ -1,4 +1,5 @@
 <template name="adminPanel">
+  {{title 'Admin Panel'}}
   <div class="row">
     <div class="col-md-6">
       <h2>Manage Courses</h2>
@@ -83,41 +84,34 @@
 </template>
 
 <template name="assignments">
+  {{title 'Assignments'}}
+
+  {{#if currentUser}}{{else}}
+    <h3>Please Log in to See Your Assignments.</h3>
+  {{/if}}
+
   <div class="row">
     <div class="col-md-4 col-md-offset-2">
-      {{#if edit}}
-      {{> adminAssignments}}
-      {{else}}
-        <div class="assignments">
-        <ol>
-        {{#each assignments}}
-          <li><a href="/assignments/{{url}}">{{name}}</a></li>
-        {{/each}}
-        </ol>
-        </div>
-      {{/if}}
+      <div class="assignments">
+      <ol>
+      {{#each assignments}}
+        <li><a href="/assignments/{{url}}">{{name}}</a></li>
+      {{/each}}
+      </ol>
+      </div>
     </div>
     <div class="col-md-2">
       {{#if isInRole 'admin'}}
         <a class="btn btn-success" href="/assignments/new">New Assignment</a> <br>
-        <button class="btn btn-default" id="edit">{{#if edit}}Save Order{{else}}Change Order{{/if}}</button>
+        <a class="btn btn-danger" href="/assignments/admin">Manage Courses</a>
       {{/if}}
     </div>
   </div>
 
 </template>
 
-<template name="adminAssignments">
-  <div id="items">
-    {{#each assignments}}
-      <div class="item">
-        <a href="/assignments/{{url}}">{{name}}</a>
-      </div>
-    {{/each}}
-  </div>
-</template>
-
 <template name="newAssignment">
+  {{title 'New Assignment'}}
   <form class="new-assignment">
     <label>
       Name of Assignment
@@ -135,6 +129,7 @@
 </template>
 
 <template name="editAssignment">
+  {{title 'Edit Assignment'}}
   <form class="edit-assignment">
     <label>
       Name:
@@ -160,7 +155,7 @@
 </template>
 
 <template name="assignment">
-
+  {{title name}}
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       {{#markdown}}{{content}}{{/markdown}}

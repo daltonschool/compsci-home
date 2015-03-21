@@ -22,6 +22,7 @@ Meteor.publish('courses', function() {
   if (Roles.userIsInRole(this.userId, 'admin'))
     return Courses.find({});
   else {
-    return Courses.find({students: {username: Meteor.users.findOne(this.userId).username}});
+    if (this.userId)
+      return Courses.find({students: {username: Meteor.users.findOne(this.userId).username}});
   }
 });
