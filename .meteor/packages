@@ -9,7 +9,6 @@ insecure
 coffeescript
 jquery
 accounts-base
-accounts-password
 alanning:roles
 iron:router
 markdown
@@ -23,3 +22,4 @@ mizzao:jquery-ui
 ian:accounts-ui-bootstrap-3
 force-ssl
 davish:accounts-dalton
+http
