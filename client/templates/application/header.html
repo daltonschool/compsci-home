@@ -15,7 +15,6 @@
         <li><a href="/assignments">Assignments</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <!--{{> loginButtons}}-->
         {{> login}}
       </ul>
     </div>
@@ -24,18 +23,16 @@
 
 <template name="login">
   {{#if currentUser}}
-    <div class="navbar-right">
-      <ul class="nav navbar-nav">
-        <li>
-          <a href="#">{{currentUser.username}}</a>
-        </li>
-        <li>
-          <a href="#" onclick="Meteor.logout()">Logout</a>
-        </li>
-      </ul>
-    </div>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="#">{{currentUser.username}}</a>
+      </li>
+      <li>
+        <a href="#" onclick="Meteor.logout()">Logout</a>
+      </li>
+    </ul>
   {{else}}
-  <form class="navbar-form navbar-right loginForm" role="form">
+  <form class="navbar-form loginForm" role="form">
     <label style="color: red;">
       {{warnings}}
     </label>
