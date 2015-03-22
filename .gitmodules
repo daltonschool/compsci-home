@@ -1,3 +1,6 @@
 [submodule "accounts-dalton"]
 	path = accounts-dalton
 	url = git@github.com:dbh937/accounts-dalton.git
+[submodule "packages/accounts-dalton"]
+	path = packages/accounts-dalton
+	url = git@github.com:dbh937/accounts-dalton.git
