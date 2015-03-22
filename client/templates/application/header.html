@@ -15,8 +15,37 @@
         <li><a href="/assignments">Assignments</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        {{> loginButtons}}
+        <!--{{> loginButtons}}-->
+        {{> login}}
       </ul>
     </div>
   </div>
+</template>
+
+<template name="login">
+  {{#if currentUser}}
+    <div class="navbar-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="#">{{currentUser.username}}</a>
+        </li>
+        <li>
+          <a href="#" onclick="Meteor.logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  {{else}}
+  <form class="navbar-form navbar-right loginForm" role="form">
+    <label style="color: red;">
+      {{warnings}}
+    </label>
+    <div class="form-group">
+      <input type="text" placeholder="Username" name="username" class="form-control">
+    </div>
+    <div class="form-group">
+      <input type="password" placeholder="Password" name="password" class="form-control">
+    </div>
+    <input type="submit" value="Sign in" class="btn btn-success">
+  </form>
+  {{/if}}
 </template>
