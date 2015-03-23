@@ -68,44 +68,35 @@ Template.adminPanel.helpers({
 Template.adminPanel.events({
   "submit #addCourse": function(e) {
     e.preventDefault();
-    if (Courses.findOne({name: e.target.courseName.value})) {
-
-    } else {
-      Courses.insert({
-        name: e.target.courseName.value,
-        students: [],
-        assignments: [] // Array of objects with assignment ID and date assigned, for sorting.
-      });
-    }
+    Meteor.call('addCourse', {
+      name: e.target.courseName.value,
+      students: [],
+      assignments: [] // Array of objects with assignment ID and date assigned, for sorting.
+    });
     e.target.courseName.value = "";
     return false;
   },
   "submit #addStudents": function(e) {
     e.preventDefault();
-
     var students = e.target.students.value.split(/, ?/);
-    var d = [];
-    for (var i = 0; i < students.length; i++) {
-      d.push({username: students[i]});
-    }
-    Courses.update(Session.get("course"), {$addToSet: {students: {$each: d}}})
+    Meteor.call('addStudentsToCourse', Session.get('course'), students);
     e.target.students.value = "";
     return false;
   },
   "click .remove": function(e) {
-    Courses.remove(Courses.findOne({name: e.target.id})._id);
+    Meteor.call('removeCourse', Courses.findOne({name: e.target.id})._id);
   },
   "click a.course": function(e) {
     Session.set("course", Courses.findOne({name: e.target.id})._id);
   },
   "click .del": function(e) {
-    Courses.update(Session.get("course"), {$pull: {students: {username: e.target.id}}})
+    Meteor.call('removeStudentFromCourse', Session.get('course'), e.target.id);
   },
   'click .assign': function(e) {
-    Courses.update(Session.get("course"), {$addToSet: {assignments: e.target.id}});
+    Meteor.call('assignToCourse', Session.get('course'), e.target.id);
   },
   'click .unassign': function(e) {
-    Courses.update(Session.get('course'), {$pull: {assignments: e.target.id}});
+    Meteor.call('unassignFromCourse', Session.get("course"), e.target.id);
   }
 });
 
@@ -114,25 +105,22 @@ Template.newAssignment.events({
     e.preventDefault();
     var levels = e.target.levels.value.split(/, ?/);
     var url = e.target.name.value.toLowerCase().replace(/ /g, '-');
-    if (Assignments.findOne({name: e.target.name.value})) {
-      // don't create a new assignment, possibly send an error
-    } else {
-      var rank = -1;
-      var a = Assignments.find({}, {sort: {rank: -1}}).fetch();
-      if (a)
-        rank = a.rank || 0;
-      Assignments.insert({
-        name: e.target.name.value,
-        url: url,
-        content: e.target.text.value.trim(),
-        levels: levels,
-        dateCreated: new Date(),
-        rank: rank+1
-      });
-    }
-    Router.go("/assignments/"+ url);
+
+    Meteor.call('addAssignment', {
+      name: e.target.name.value,
+      url: url,
+      content: e.target.text.value.trim(),
+      levels: levels,
+      dateCreated: new Date()
+    }, function(err, result) {
+      if (!err)
+        Router.go("/assignments/"+url);
+      else
+        Router.go("/assignments");
+    });
     return false;
-  }
+  },
+  'keydown textarea': textareaTab
 });
 
 Template.editAssignment.helpers({
@@ -142,6 +130,30 @@ Template.editAssignment.helpers({
   "trim": function(s) {
     return s.trim();
   }
+});
+
+Template.editAssignment.events({
+  'submit .edit-assignment': function(e) {
+    var a =  Assignments.findOne({name: e.target.name.value}); // get the document of the assignment
+
+    Meteor.call('editAssignment',a._id, {
+      content: e.target.text.value.trim(),
+      levels: e.target.levels.value.split(/, /)
+    }, function(err, result) {
+      if (!err) {
+        Router.go('/assignments/'+ a.url);
+      }
+    });
+    return false;
+  },
+  'click .delete': function(e) {
+    Meteor.call('deleteAssignment', e.target.id, function(err, result) {
+      if (!err) {
+        Router.go('/assignments');
+      }
+    });
+  },
+  'keydown textarea': textareaTab
 });
 
 function textareaTab(e) {
@@ -159,23 +171,3 @@ function textareaTab(e) {
       e.target.selectionEnd = start + 1;
   }
 }
-
-Template.editAssignment.events({
-  'submit .edit-assignment': function(e) {
-    var a = Assignments.findOne({name: e.target.name.value});
-    Assignments.update(a._id, {
-      $set: {content: e.target.text.value.trim(), levels: e.target.levels.value.split(/, /)}
-    });
-    Router.go("/assignments/"+ a.url);
-    return false;
-  },
-  'click .delete': function(e) {
-    Assignments.remove(e.target.id);
-    Router.go("/assignments");
-  },
-  'keydown textarea': textareaTab
-});
-
-Template.newAssignment.events({
-  'keydown textarea': textareaTab
-});
