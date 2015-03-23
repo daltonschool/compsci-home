@@ -8,6 +8,7 @@ meteor-platform
 coffeescript
 jquery
 accounts-base
+accounts-password
 alanning:roles
 iron:router
 markdown
@@ -24,3 +25,7 @@ davish:accounts-dalton
 http
 tomi:upload-server
 tomi:upload-jquery
+autopublish
+cfs:standard-packages
+cfs:filesystem
+raix:ui-dropped-event

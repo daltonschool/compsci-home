@@ -171,5 +171,11 @@
         <a class="btn btn-warning" href="edit/{{url}}">Edit Assignment</a>
       {{/if}}
     </div>
+      <!--TODO: iterate through all assignment submissions and display-->
+
+      <div class="assignment_submission">
+
+          {{> upload_bootstrap multiple=true callbacks=assignmentSubmit}}
+      </div>
   </div>
 </template>
