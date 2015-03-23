@@ -22,11 +22,20 @@ Router.route("/assignments/admin", function() {
 
 Router.route("/assignments/edit/:url", function() {
   if (Roles.userIsInRole(Meteor.userId(), 'admin')) {
-    this.render("editAssignment", {
-      data: function () {
-        return Assignments.findOne({url: this.params.url});
-      }
-    });
+    var a = Assignments.findOne({url: this.params.url});
+    if (a) {
+      this.render("editAssignment", {
+        data: function() {
+          return {
+            name: a.name,
+            content: a.history[a.history.length-1].content,
+            url: a.url
+          };
+        }
+      });
+    } else {
+      this.redirect('/assignments')
+    }
   }
   else {
     this.redirect("/assignments");
@@ -39,12 +48,22 @@ Router.route("/assignments/new", function() {
   else
     this.redirect("/assignments");
 });
-Router.route("/assignments/:name", function() {
-  this.render("assignment", {
-    data: function() {
-      return Assignments.findOne({url: this.params.name});
-    }
-  });
+
+Router.route("/assignments/:url", function() {
+  var a = Assignments.findOne({url: this.params.url});
+  if (a) {
+    this.render("assignment", {
+      data: function() {
+        return {
+          name: a.name,
+          content: a.history[a.history.length-1].content,
+          url: a.url
+        };
+      }
+    });
+  } else {
+    this.redirect('/assignments')
+  }
 });
 
 Router.route("/assignments", function() {

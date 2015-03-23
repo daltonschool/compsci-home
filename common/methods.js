@@ -40,15 +40,11 @@ Meteor.methods({
    * Modify an assignment.
    * Params:
    *  Assignment id
-   *  object with fields to update.
+   *  string with new assignment content
    */
-  editAssignment: function(assignmentId, d) {
+  editAssignment: function(assignmentId, content) {
     ifAdmin(Meteor.userId(), function() {
-      if (d.name) {
-        throw new Meteor.Error(403, 'you cannot change the name of an assignment.');
-      } else {
-        Assignments.update(assignmentId, {$set: d});
-      }
+      Assignments.update(assignmentId, {$push: {history: {content: content, date: new Date()}}});
     });
   },
   /*
@@ -62,7 +58,6 @@ Meteor.methods({
     });
   },
 
-
   /*
    **********************************
    *                                *
@@ -70,7 +65,6 @@ Meteor.methods({
    *                                *
    **********************************
    */
-
   /*
    * Add a course.
    * Params: prospective course document.

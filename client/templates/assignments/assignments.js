@@ -103,14 +103,12 @@ Template.adminPanel.events({
 Template.newAssignment.events({
   "submit .new-assignment": function(e) {
     e.preventDefault();
-    var levels = e.target.levels.value.split(/, ?/);
     var url = e.target.name.value.toLowerCase().replace(/ /g, '-');
 
     Meteor.call('addAssignment', {
       name: e.target.name.value,
       url: url,
-      content: e.target.text.value.trim(),
-      levels: levels,
+      history: [{content: e.target.text.value.trim(), date: new Date()}],
       dateCreated: new Date()
     }, function(err, result) {
       if (!err)
@@ -136,10 +134,7 @@ Template.editAssignment.events({
   'submit .edit-assignment': function(e) {
     var a =  Assignments.findOne({name: e.target.name.value}); // get the document of the assignment
 
-    Meteor.call('editAssignment',a._id, {
-      content: e.target.text.value.trim(),
-      levels: e.target.levels.value.split(/, /)
-    }, function(err, result) {
+    Meteor.call('editAssignment',a._id, e.target.text.value.trim(), function(err, result) {
       if (!err) {
         Router.go('/assignments/'+ a.url);
       }
