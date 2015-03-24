@@ -51,16 +51,18 @@ Router.route("/assignments/new", function() {
 
 Router.route("/assignments/:url", function() {
   var a = Assignments.findOne({url: this.params.url});
-  for (var i=0;i< a.history.length;i++)
-    a.history[i].indx = i;
   if (a) {
+    a.history = a.history.reverse();
+    for (var i=0;i< a.history.length;i++)
+      a.history[i].indx = i;
     this.render("assignment", {
       data: function() {
         return {
           name: a.name,
           content: a.history[a.history.length-1].content,
           history: a.history,
-          url: a.url
+          url: a.url,
+          _id: a._id
         };
       }
     });

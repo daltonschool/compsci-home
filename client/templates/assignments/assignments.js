@@ -7,6 +7,7 @@ Meteor.subscribe("courses");
 
 Session.setDefault("course", undefined);
 Session.setDefault("edit", false);
+Session.setDefault("historyOffset", 0);
 
 Template.assignments.helpers({
   'assignments': function() {
@@ -29,7 +30,6 @@ Template.assignments.helpers({
     }
   }
 });
-
 
 Template.adminPanel.helpers({
   'courses': function() {
@@ -149,6 +149,36 @@ Template.editAssignment.events({
     });
   },
   'keydown textarea': textareaTab
+});
+
+Template.assignment.helpers({
+  'getContent': function(h) {
+    return h[Session.get("historyOffset")].content;
+  },
+  'dateFormat': function(d) {
+    return d.toLocaleString();
+  },
+  'isOld': function() {
+    return Session.get('historyOffset') != 0;
+  }
+});
+
+Template.assignment.events({
+  'change .history': function(e) {
+    var newIndx = $(e.target).val();
+    Session.set('historyOffset', newIndx);
+  },
+  'click .restore': function(e) {
+    Meteor.call('restoreAssignment', this._id, Session.get('historyOffset'), function(err, result) {
+      if (!err) {
+        Session.set('historyOffset', 0);
+        $('.history :nth-child(0)').prop('selected', true);
+      }
+    });
+  }
+});
+Template.assignment.onRendered(function() {
+  Session.set('historyOffset', 0);
 });
 
 function textareaTab(e) {

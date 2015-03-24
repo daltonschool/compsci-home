@@ -162,20 +162,36 @@
 
 <template name="assignment">
   {{title name}}
+  {{#if isOld}}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-warning">
+          You're currently viewing an older version of this entry.
+          <button style="" class="btn btn-danger restore">Restore.</button>
+        </div>
+      </div>
+    </div>
+  {{/if}}
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      {{#markdown}}{{content}}{{/markdown}}
+      {{#markdown}}{{getContent history}}{{/markdown}}
     </div>
     <div class="col-md-2">
       {{#if isInRole 'admin'}}
         <a class="btn btn-warning" href="edit/{{url}}">Edit Assignment</a>
+
+        <h3>History</h3>
+        <select class="history">
+          {{#each history}}
+            <option value="{{indx}}">{{dateFormat date}}</option>
+          {{/each}}
+        </select>
       {{/if}}
-    </div>
       <!--TODO: iterate through all assignment submissions and display-->
-
       <div class="assignment_submission">
-
-          {{> upload_bootstrap multiple=true callbacks=assignmentSubmit}}
+        {{> upload_bootstrap multiple=true callbacks=assignmentSubmit}}
       </div>
+    </div>
+
   </div>
 </template>

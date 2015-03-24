@@ -47,6 +47,22 @@ Meteor.methods({
       Assignments.update(assignmentId, {$push: {history: {content: content, date: new Date()}}});
     });
   },
+
+  /*
+   * Restore an old version of an assignment.
+   * Params:
+   *  Assignment id
+   *  index of past version that will be pushed to the front.
+   */
+  restoreAssignment: function(assignmentId, indx) {
+    /* we have to push to the end of the history when we edit,
+    but when managing the history document it's easier with the most recent entry at the front, so we flip it. */
+    ifAdmin(Meteor.userId(), function() {
+      var h = Assignments.findOne(assignmentId).history.reverse();
+      var updatedAssignment = {content: h[indx].content, date: new Date()};
+      return Assignments.update(assignmentId, {$push: {history: updatedAssignment}});
+    });
+  },
   /*
    * Remove an assignment from the database.
    * Params:
