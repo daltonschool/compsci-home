@@ -113,6 +113,22 @@
 
   <div class="row">
     <div class="col-md-4">
+      <!--TODO: Make feed look better-->
+      <h3>Feed</h3>
+      <div class="feed">
+        {{#if currentUser}}
+        {{#each update}}
+          <div class="feedHeading">
+            <h5><span>{{fullname author}} in {{course}} on {{format date}}</span></h5>
+          </div>
+          <div class="feedBody">
+            <p>{{content}}</p>
+          </div>
+        {{/each}}
+        {{/if}}
+      </div>
+    </div>
+    <div class="col-md-4">
       <div class="assignments">
       <ol>
       {{#each assignments}}
@@ -125,25 +141,6 @@
       {{#if isInRole 'admin'}}
         <a class="btn btn-success" href="/assignments/new">New Assignment</a> <br>
         <a class="btn btn-danger" href="/assignments/admin">Manage Courses</a>
-      {{/if}}
-    </div>
-  </div>
-  <div class="row">
-    <div class="feed">
-      <!--TODO: Make the feed look more like twitter.-->
-      {{#if currentUser}}
-        <h3>Feed</h3>
-        <table class="table">
-          <tbody>
-          {{#each update}}
-            <tr>
-              <td>{{content}}</td>
-              <td>{{fullname author}}</td>
-              <td>{{format date}}</td>
-            </tr>
-          {{/each}}
-          </tbody>
-        </table>
       {{/if}}
     </div>
   </div>

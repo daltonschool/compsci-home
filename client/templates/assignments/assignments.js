@@ -38,6 +38,7 @@ Template.assignments.helpers({
     for (var i = 0; i < m.feed.length; i++) {
       for (var j = 0; j < c.length; j++) {
         if (c[j].feed.length >= i) {
+          c[j].feed[i].course = c[j].name;
           f.push(c[j].feed[i]);
         }
       }
