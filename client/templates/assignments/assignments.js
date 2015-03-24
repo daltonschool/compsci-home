@@ -28,6 +28,27 @@ Template.assignments.helpers({
 
       return assnmnts;
     }
+  },
+  update: function() {
+    var c = Courses.find().fetch();
+    var m = _.max(c, function (n) {
+      return n.feed.length;
+    });
+    var f = [];
+    for (var i = 0; i < m.feed.length; i++) {
+      for (var j = 0; j < c.length; j++) {
+        if (c[j].feed.length >= i) {
+          f.push(c[j].feed[i]);
+        }
+      }
+    }
+    return f.reverse();
+  },
+  fullname: function(id) {
+    return Meteor.users.findOne(id).profile.fullname;
+  },
+  format: function(d) {
+    return d.toLocaleString();
   }
 });
 
@@ -62,6 +83,10 @@ Template.adminPanel.helpers({
     for (var i=0; i < a.length; i++)
       assigned[i] = Assignments.findOne(a[i]);
     return assigned;
+  },
+  'update': function() {
+    var f = Courses.findOne(Session.get('course')).feed.reverse();
+    return f.slice(0,5); // only return 5 most recent updates.
   }
 });
 
@@ -83,6 +108,11 @@ Template.adminPanel.events({
     e.target.students.value = "";
     return false;
   },
+  "submit #feed": function(e) {
+    Meteor.call('pushToFeed', Session.get('course'), e.target.content.value);
+    return false;
+  },
+  // remove a course from the database
   "click .remove": function(e) {
     Meteor.call('removeCourse', Courses.findOne({name: e.target.id})._id);
   },
@@ -177,7 +207,9 @@ Template.assignment.events({
     });
   }
 });
+
 Template.assignment.onRendered(function() {
+  // make sure that you're always seeing the most recent document.
   Session.set('historyOffset', 0);
 });
 

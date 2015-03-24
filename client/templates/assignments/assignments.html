@@ -1,7 +1,7 @@
 <template name="adminPanel">
   {{title 'Admin Panel'}}
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-3">
       <h2>Manage Courses</h2>
       <form id="addCourse">
       <table class="table">
@@ -31,51 +31,74 @@
       </table>
       </form>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-9">
       <h1>{{course}}</h1>
       {{#if course}}
-        <h3>Assignments</h3>
-        <table class="table">
-          <thead>
-          <tr>
-            <td>Unassigned</td>
-            <td>Assigned</td>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td width="50%">
-              <ul>
-                {{#each unassigned}}
-                  <li>{{name}} <button id="{{_id}}" class="btn btn-xs btn-link assign">+</button></li>
+        <div class="row">
+          <h3>Assignments</h3>
+          <table class="table">
+            <thead>
+            <tr>
+              <td>Unassigned</td>
+              <td>Assigned</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td width="50%">
+                <ul>
+                  {{#each unassigned}}
+                    <li>{{name}} <button id="{{_id}}" class="btn btn-xs btn-link assign">+</button></li>
+                  {{/each}}
+                </ul>
+              </td>
+              <td width="50%">
+                <ol>
+                  {{#each assigned}}
+                    <li>{{name}} <button id="{{_id}}" class="btn btn-xs btn-link unassign">&times;</button></li>
+                  {{/each}}
+                </ol>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Feed</h3>
+            <form id="feed">
+              <textarea name="content" class="feed" maxlength="140"></textarea>
+              <br>
+              <input type="submit" class="btn btn-default">
+            </form>
+            <div id="showFeed">
+              <table class="table table-striped">
+                <tbody>
+                {{#each update}}
+                <tr><td>{{content}}</td></tr>
                 {{/each}}
-              </ul>
-            </td>
-            <td width="50%">
-              <ol>
-                {{#each assigned}}
-                  <li>{{name}} <button id="{{_id}}" class="btn btn-xs btn-link unassign">&times;</button></li>
-                {{/each}}
-              </ol>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <h3>Current Students</h3>
-        <ul style="list-style-type: none;">
-          {{#each students}}
-            <li style="list-style-type: none;">
-              <a href="#" class="btn btn-link del student" id="{{username}}">&times;</a> {{username}}
-            </li>
-          {{/each}}
-        </ul>
-        <form id="addStudents">
-          <label>
-            Add Students
-          </label>
-          <input type="text" name="students">
-          <input class="btn btn-xs btn-default" type="submit">
-        </form>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h3>Current Students</h3>
+            <ul style="list-style-type: none;">
+              {{#each students}}
+                <li style="list-style-type: none;">
+                  <a href="#" class="btn btn-link del student" id="{{username}}">&times;</a> {{username}}
+                </li>
+              {{/each}}
+            </ul>
+            <form id="addStudents">
+              <label>
+                Add Students
+              </label>
+              <input type="text" name="students">
+              <input class="btn btn-xs btn-default" type="submit">
+            </form>
+          </div>
+        </div>
       {{/if}}
     </div>
   </div>
@@ -89,7 +112,7 @@
   {{/if}}
 
   <div class="row">
-    <div class="col-md-4 col-md-offset-2">
+    <div class="col-md-4">
       <div class="assignments">
       <ol>
       {{#each assignments}}
@@ -102,6 +125,25 @@
       {{#if isInRole 'admin'}}
         <a class="btn btn-success" href="/assignments/new">New Assignment</a> <br>
         <a class="btn btn-danger" href="/assignments/admin">Manage Courses</a>
+      {{/if}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="feed">
+      <!--TODO: Make the feed look more like twitter.-->
+      {{#if currentUser}}
+        <h3>Feed</h3>
+        <table class="table">
+          <tbody>
+          {{#each update}}
+            <tr>
+              <td>{{content}}</td>
+              <td>{{fullname author}}</td>
+              <td>{{format date}}</td>
+            </tr>
+          {{/each}}
+          </tbody>
+        </table>
       {{/if}}
     </div>
   </div>
@@ -123,7 +165,7 @@
           <input type="text" name="levels">
         </label>
         <br>
-        <textarea name="text"></textarea>
+        <textarea name="text" class="mkdn"></textarea>
         <input type="submit">
       </form>
     </div>
@@ -148,7 +190,7 @@
         </label>
         <input type="text" name="levels" value="{{join levels}}">
         <br>
-        <textarea name="text">{{trim content}}</textarea>
+        <textarea class="mkdn" name="text">{{trim content}}</textarea>
         <input type="submit" class="btn btn-primary">
       </form>
     </div>

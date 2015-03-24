@@ -13,14 +13,9 @@ function ifAdmin(userId, callback) {
 }
 
 Meteor.methods({
-
-  /*
-   **********************************
-   *                                *
+  /**********************************
    *       Assignment Methods       *
-   *                                *
-   **********************************
-   */
+   **********************************/
 
   /*
    * Add a new assignment.
@@ -74,13 +69,10 @@ Meteor.methods({
     });
   },
 
-  /*
-   **********************************
-   *                                *
+  /**********************************
    *       Admin Page Methods       *
-   *                                *
-   **********************************
-   */
+   **********************************/
+
   /*
    * Add a course.
    * Params: prospective course document.
@@ -152,6 +144,27 @@ Meteor.methods({
   unassignFromCourse: function(courseId, assignmentId) {
     ifAdmin(Meteor.userId(), function() {
       Courses.update(courseId, {$pull: {assignments: assignmentId}});
+    });
+  },
+
+  /*
+   * "Tweet" out a message to all students enrolled in the course.
+   * Params:
+   *  course id
+   *  "Tweet" content.
+   */
+  pushToFeed: function(courseId, content) {
+    ifAdmin(Meteor.userId(), function() {
+      if (content.length > 140) {
+        throw new Meteor.Error('409', "exceeded character limit");
+      } else {
+        var u = {
+          content: content,
+          date: new Date(),
+          author: Meteor.userId()
+        };
+        Courses.update(courseId, {$push: {feed: u}});
+      }
     });
   }
 });
