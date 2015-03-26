@@ -148,6 +148,41 @@ Meteor.methods({
   },
 
   /*
+   * Update relevant fields when a user uploads a file.
+   */
+  uploadAssignment: function(assignmentInfo, fileInfo) {
+    fileInfo.date = new Date(); // add the date to the fileInfo
+    if (Meteor.userId()) {
+      if (Assignments.findOne(assignmentInfo._id)) { // if the assignment exists, let's update the submissions subdoc.
+
+        /* TODO: Allow user to view all their submissions in one place.
+         * Query to do that:
+         * Assignments.find("submissions.user": Meteor.userId());
+         *
+         * Problem with current implementation is that any user in the class can see
+         * the paths of any student's submissions.
+         */
+
+        // if the user is already in the submissions subdoc, push the new fileInfo to the appropriate place.
+        // http://stackoverflow.com/questions/23470658/mongodb-upsert-sub-document
+        if (Assignments.findOne({_id: assignmentInfo._id, "submissions.user": Meteor.userId()})) {
+          Assignments.update({_id: assignmentInfo._id, "submissions.user": Meteor.userId()},
+            {$push: {"submissions.$.fileInfo": fileInfo}});
+        } else {
+          // if there's no user by that name that's uploaded anything, push a new entry into the submissions array.
+          Assignments.update(assignmentInfo._id, {
+            $push: {"submissions": {user: Meteor.userId(), fileInfo: [fileInfo]}}
+          });
+        }
+      } else {
+        throw new Meteor.Error('404', 'course not found.');
+      }
+    } else {
+      throw new Meteor.Error('403', 'Must be logged in to upload.');
+    }
+  },
+
+  /*
    * "Tweet" out a message to all students enrolled in the course.
    * Params:
    *  course id

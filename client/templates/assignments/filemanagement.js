@@ -3,11 +3,14 @@
  */
 Template.assignment.helpers({
     assignmentSubmit: function() {
+        var assignmentInfo = this;
         return {
             finished: function (index, fileInfo, context) {
-                console.log(fileInfo);
-                //TODO: associate fileInfo.name with a user and an assignment
+                Meteor.call('uploadAssignment', assignmentInfo, fileInfo);
             }
         }
+    },
+    assignmentData: function() {
+        return {type: 'assignment'};
     }
 });
