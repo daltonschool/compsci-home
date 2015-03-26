@@ -20,28 +20,6 @@ Router.route("/assignments/admin", function() {
   }
 });
 
-Router.route("/assignments/edit/:url", function() {
-  if (Roles.userIsInRole(Meteor.userId(), 'admin')) {
-    var a = Assignments.findOne({url: this.params.url});
-    if (a) {
-      this.render("editAssignment", {
-        data: function() {
-          return {
-            name: a.name,
-            content: a.history[a.history.length-1].content,
-            url: a.url
-          };
-        }
-      });
-    } else {
-      this.redirect('/assignments')
-    }
-  }
-  else {
-    this.redirect("/assignments");
-  }
-});
-
 Router.route("/assignments/new", function() {
   if (Roles.userIsInRole(Meteor.userId(), 'admin'))
     this.render("newAssignment");
@@ -68,6 +46,47 @@ Router.route("/assignments/:url", function() {
     });
   } else {
     this.redirect('/assignments')
+  }
+});
+
+Router.route("/assignments/:url/edit", function() {
+  if (Roles.userIsInRole(Meteor.userId(), 'admin')) {
+    var a = Assignments.findOne({url: this.params.url});
+    if (a) {
+      this.render("editAssignment", {
+        data: function() {
+          return {
+            name: a.name,
+            content: a.history[a.history.length-1].content,
+            url: a.url
+          };
+        }
+      });
+    } else {
+      this.redirect('/assignments')
+    }
+  }
+  else {
+    this.redirect("/assignments");
+  }
+});
+
+Router.route("/assignments/:url/submissions", function() {
+  if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+    var a = Assignments.findOne({url: this.params.url});
+    if (a) {
+      this.render("assignmentSubmissions", {
+        data: function () {
+          return {
+            submission: a.submissions
+          }
+        }
+      });
+    } else {
+      this.redirect('/assignments');
+    }
+  } else {
+    this.redirect('/assignments/'+this.params.url);
   }
 });
 

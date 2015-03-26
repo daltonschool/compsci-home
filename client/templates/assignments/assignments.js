@@ -8,6 +8,7 @@ Meteor.subscribe("courses");
 Session.setDefault("course", undefined);
 Session.setDefault("edit", false);
 Session.setDefault("historyOffset", 0);
+Session.setDefault('submissionInfo', undefined);
 
 Template.assignments.helpers({
   'assignments': function() {
@@ -184,6 +185,22 @@ Template.editAssignment.events({
   'keydown textarea': textareaTab
 });
 
+function textareaTab(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode == 9) {
+    e.preventDefault();
+    var start = e.target.selectionStart;
+    var end = e.target.selectionEnd;
+    // set textarea value to: text before caret + tab + text after caret
+    e.target.value = e.target.value.substring(0, start)
+    + '\t'
+    + e.target.value.substring(end);
+    // put caret at right position again
+    e.target.selectionStart =
+      e.target.selectionEnd = start + 1;
+  }
+}
+
 Template.assignment.helpers({
   'getContent': function(h) {
     return h[Session.get("historyOffset")].content;
@@ -216,18 +233,31 @@ Template.assignment.onRendered(function() {
   Session.set('historyOffset', 0);
 });
 
-function textareaTab(e) {
-  var keyCode = e.keyCode || e.which;
-  if (keyCode == 9) {
-    e.preventDefault();
-    var start = e.target.selectionStart;
-    var end = e.target.selectionEnd;
-    // set textarea value to: text before caret + tab + text after caret
-    e.target.value = e.target.value.substring(0, start)
-    + '\t'
-    + e.target.value.substring(end);
-    // put caret at right position again
-    e.target.selectionStart =
-      e.target.selectionEnd = start + 1;
+Template.assignmentSubmissions.helpers({
+  userInfo: function(id, field) {
+    var u = Meteor.users.findOne(id);
+    if (u[field])
+      return u[field];
+    else
+      return u.profile[field];
+  },
+  submissionInfo: function() {
+    return Session.get('submissionInfo');
+  },
+  mostRecentSubmission: function() {
+    var s = Session.get('submissionInfo');
+    if (s) {
+      // computationally, would be better to do s.pop(), but I'm not sure if object is mutable.
+      return s.fileInfo.reverse()[0]
+    }
   }
-}
+});
+
+Template.assignmentSubmissions.events({
+  'click button.student': function(e) {
+    /* get the data that was used to render that button
+     * i.e. the element of the submissions array, with the fileInfo history.
+     */
+    Session.set('submissionInfo', Blaze.getData(e.target));
+  }
+});

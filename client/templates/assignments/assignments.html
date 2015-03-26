@@ -223,7 +223,8 @@
     </div>
     <div class="col-md-2">
       {{#if isInRole 'admin'}}
-        <a class="btn btn-warning" href="edit/{{url}}">Edit Assignment</a>
+        <a class="btn btn-warning" href="{{url}}/edit">Edit Assignment</a>
+        <a class="btn btn-success" href="{{url}}/submissions">View Submissions</a>
 
         <h3>History</h3>
         <select class="history">
@@ -239,8 +240,29 @@
   <div class="row">
     <hr>
     <div class="col-md-8 col-md-offset-2 assignment_submission">
-      <h3>Submit Assignment Here</h3>
-      {{> upload_bootstrap multiple=true callbacks=assignmentSubmit formData=assignmentData}}
+      {{#if currentUser}}
+         <h3>Submit Assignment Here</h3>
+        {{> upload_bootstrap multiple=true callbacks=assignmentSubmit formData=assignmentData}}
+      {{/if}}
+    </div>
+  </div>
+</template>
+
+<template name="assignmentSubmissions">
+  <div class="row">
+    <div class="col-md-3">
+      <h3>Submissions Recieved</h3>
+      <ul>
+        {{#each submission}}
+          <li><button class="btn btn-link student" id="{{user}}">{{userInfo user 'fullname'}}</button></li>
+        {{/each}}
+      </ul>
+    </div>
+    <div class="col-md-9">
+      {{#if submissionInfo}}
+        <h3>Submission from {{userInfo submissionInfo.user 'fullname'}}</h3>
+        File path: {{mostRecentSubmission.path}}
+      {{/if}}
     </div>
   </div>
 </template>
