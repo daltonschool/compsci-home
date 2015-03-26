@@ -129,6 +129,7 @@
       </div>
     </div>
     <div class="col-md-4">
+      <h3>Assignments</h3>
       <div class="assignments">
       <ol>
       {{#each assignments}}
@@ -137,13 +138,18 @@
       </ol>
       </div>
     </div>
-    <div class="col-md-2">
-      {{#if isInRole 'admin'}}
-        <a class="btn btn-success" href="/assignments/new">New Assignment</a> <br>
-        <a class="btn btn-danger" href="/assignments/admin">Manage Courses</a>
-      {{/if}}
+    <div class="col-md-4">
+
     </div>
   </div>
+  {{#if isInRole 'admin'}}
+    <div class="row">
+      <div class="col-md-4 col-md-offset-8">
+        <a class="btn btn-success" href="/assignments/new">New Assignment</a>
+        <a class="btn btn-danger" href="/assignments/admin">Manage Courses</a>
+      </div>
+    </div>
+  {{/if}}
 
 </template>
 
@@ -227,10 +233,14 @@
         </select>
       {{/if}}
       <!--TODO: iterate through all assignment submissions and display-->
-      <div class="assignment_submission">
-        {{> upload_bootstrap multiple=true callbacks=assignmentSubmit}}
-      </div>
-    </div>
 
+    </div>
+  </div>
+  <div class="row">
+    <hr>
+    <div class="col-md-8 col-md-offset-2 assignment_submission">
+      <h3>Submit Assignment Here</h3>
+      {{> upload_bootstrap multiple=true callbacks=assignmentSubmit formData=assignmentData}}
+    </div>
   </div>
 </template>
