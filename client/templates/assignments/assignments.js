@@ -81,8 +81,10 @@ Template.adminPanel.helpers({
      */
     var a = Courses.findOne(Session.get("course")).assignments;
     var assigned = [];
-    for (var i=0; i < a.length; i++)
-      assigned[i] = Assignments.findOne(a[i]);
+    for (var i=0; i < a.length; i++) {
+      if(Assignments.findOne(a[i])) // if the assignment hasn't been deleted
+        assigned.push(Assignments.findOne(a[i]));
+    }
     return assigned;
   },
   'update': function() {
