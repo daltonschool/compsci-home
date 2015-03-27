@@ -12,11 +12,18 @@ Meteor.publish('assignments', function() {
       for (var i=0;i < c.length;i++) { // get *all* of the assignments that are relevant in one object
         a = a.concat(c[i].assignments);
       }
-      return Assignments.find({_id: {$in: a}}, {submissions: 0}); // return all of those objects without the submissions
+      return Assignments.find({_id: {$in: a}}); // return all of those objects without the submissions
     }
     else
       return [];
   }
+});
+
+Meteor.publish('submissions', function() {
+  if (Roles.userIsInRole(this.userId, 'admin'))
+    return Submissions.find({});
+  else
+    return Submissions.find({user: this.userId});
 });
 
 Meteor.publish('courses', function() {
