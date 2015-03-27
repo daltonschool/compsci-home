@@ -262,6 +262,16 @@
       {{#if submissionInfo}}
         <h3>Submission from {{userInfo submissionInfo.user 'fullname'}}</h3>
         File path: {{mostRecentSubmission.path}}
+        Timestamp: {{mostRecentSubmission.timestamp}}
+
+        <form id="grading">
+          <label>Percent</label><br>
+          <input type="number" value="{{submissionInfo.grade.score}}" min="0" max="100" name="percent"> <br>
+          <label>Comments</label><br>
+          <textarea name="comments">{{submissionInfo.grade.comments}}</textarea><br>
+          <input type="submit" class="btn btn-default">
+        </form>
+
       {{/if}}
     </div>
   </div>

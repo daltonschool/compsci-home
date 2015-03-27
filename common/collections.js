@@ -3,3 +3,4 @@
  */
 Assignments = new Mongo.Collection("assignments");
 Courses = new Mongo.Collection("courses");
+Submissions = new Mongo.Collection('submissions');

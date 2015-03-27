@@ -78,7 +78,8 @@ Router.route("/assignments/:url/submissions", function() {
       this.render("assignmentSubmissions", {
         data: function () {
           return {
-            submission: a.submissions
+            submission: Submissions.find({assignment: a._id}),
+            assignment: a._id
           }
         }
       });

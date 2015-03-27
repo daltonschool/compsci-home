@@ -4,6 +4,7 @@
 
 Meteor.subscribe("assignments");
 Meteor.subscribe("courses");
+Meteor.subscribe("submissions");
 
 Session.setDefault("course", undefined);
 Session.setDefault("edit", false);
@@ -248,7 +249,7 @@ Template.assignmentSubmissions.helpers({
     var s = Session.get('submissionInfo');
     if (s) {
       // computationally, would be better to do s.pop(), but I'm not sure if object is mutable.
-      return s.fileInfo.reverse()[0]
+      return s.files[s.files.length-1];
     }
   }
 });
@@ -259,5 +260,15 @@ Template.assignmentSubmissions.events({
      * i.e. the element of the submissions array, with the fileInfo history.
      */
     Session.set('submissionInfo', Blaze.getData(e.target));
+  },
+  'submit #grading': function(e) {
+    e.preventDefault();
+    Meteor.call('updateGrade', this.assignment, {
+      score: e.target.percent.value,
+      comments: e.target.comments.value,
+      timestamp: new Date()
+    });
+
+    return false;
   }
 });
