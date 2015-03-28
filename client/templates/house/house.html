@@ -1,0 +1,22 @@
+<template name="house">
+<table class="table">
+  <thead>
+  <tr>
+    <td>Assignment</td>
+    <td>Comments</td>
+    <td>Score</td>
+  </tr>
+  </thead>
+  <tbody>
+  {{#each submission}}
+    <tr>
+      <td>{{getName assignment}}</td>
+      <td>{{#if grade.comments}}
+        {{#markdown}}{{grade.comments}}{{/markdown}}
+      {{else}} N/A{{/if}}</td>
+      <td>{{#if grade.score}}{{grade.score}}% {{else}} N/A{{/if}}</td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>
+</template>

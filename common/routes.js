@@ -95,6 +95,10 @@ Router.route("/assignments", function() {
   this.render("assignments");
 });
 
+Router.route("/house", function() {
+  this.render('house');
+});
+
 Router.route("/", function() {
   this.render("home");
 });
