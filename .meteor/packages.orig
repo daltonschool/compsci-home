@@ -1,0 +1,25 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-platform
+insecure
+coffeescript
+jquery
+accounts-base
+accounts-password
+alanning:roles
+iron:router
+markdown
+underscore
+reywood:bootstrap3-sass
+mrt:bootstrap-3
+tsega:bootstrap3-datetimepicker
+twbs:bootstrap
+simple:highlight.js
+mizzao:jquery-ui
+ian:accounts-ui-bootstrap-3
+mrt:bootstrap-alerts
+autopublish
