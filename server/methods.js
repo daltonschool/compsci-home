@@ -14,6 +14,14 @@ function ifAdmin(userId, callback) {
 
 Meteor.methods({
   /**********************************
+   *          Debug Methods         *
+   **********************************/
+
+  createUser: function(options, cb) {
+    return Accounts.createUser(options)
+  },
+
+  /**********************************
    *       Assignment Methods       *
    **********************************/
 
@@ -208,5 +216,49 @@ Meteor.methods({
       var fs = Npm.require('fs');
       
     }
+  },
+
+  /**********************************
+   *       Lab Signup Methods       *
+   **********************************/
+
+   /*
+    * Sign up for a new lab with the parameters as their respective pieces of info
+    */
+  addLab: function(data) {
+    console.log(data)
+    check(data, Match.ObjectIncluding({
+      topic: String,
+      start: Date,
+      duration: Number,
+      instructor: Match.Where(function(id) {
+        return Meteor.users.findOne({ _id: id, "profile.roles": { $in: ["instructor"] } }) != null;
+      }),
+      comments: Match.Optional(String)
+    }));
+    var dataEnd = moment(data.start).add(data.duration, "m").toDate(),
+        overlaps = Labs.aggregate([{
+            $project: {
+              end: { $add: ["$start", { $multiply: ["$duration", 60000] }] },
+              start: 1, duration: 1, instructor: 1
+          }}, {
+            $match: {
+                instructor: data.instructor,
+                $or: [
+                  { start: { $gte: data.start, $lt: dataEnd } },
+                  { end: { $gte: data.start, $lt: dataEnd } }
+                ]
+          }}
+        ]);
+
+    console.log(overlaps)
+
+    if(overlaps.length != 0)
+      throw new Meteor.Error("409", "That instructor already has a lab scheduled for that time slot");
+
+    return Labs.insert({
+      topic: data.topic, start: data.start, duration: data.duration,
+      instructor: data.instructor, comments: data.comments
+    });
   }
 });

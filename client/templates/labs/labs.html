@@ -1,0 +1,72 @@
+<head>
+	<title>CS Lab Signup</title>
+	<link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css">
+	<script type="text/javascript" href="/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+</head>
+
+<template name="labs_signin">
+	<div class="alert alert-danger alert-dismissable fade in text-center" role="alert" id="signin-alert">
+		<strong>Error!</strong>
+		You need to log in before you can sign up for a lab!
+	</div>
+</template>
+
+<template name="labs_root">
+	<div class="col-sm-8 col-sm-offset-2" id="form-root">
+		{{#unless currentUser}}{{> labs_signin}}{{/unless}}
+		<div class="well" id="lab-form">
+			<div class="form-grey {{#unless currentUser}}active{{/unless}}"></div>
+			{{> labs_form}}
+		</div>
+	</div>
+</template>
+
+<template name="labs_form">
+	{{#with err}}
+		{{#if msg}}
+			<div class="alert alert-danger">
+				<p><strong>Uh oh!</strong> Something went horribly wrong! Here's the error:</p>
+				<p><code>{{msg}}</code></p>
+				<p>If you have any questions, please ask send the error to an admin.</p>
+			</div>
+		{{/if}}
+	{{/with}}
+	<h1>CS Lab Signup</h1>
+	<p>To sign up or a lab with a Computer Science instructor, find a time on his lab schedule (see below) and then fill out the form below. You will get an email response shortly to confirm your form submission.</p>
+	<form>
+		<fieldset {{checkLogged}}>
+			{{#each items}}
+				{{> labs_item}}
+			{{/each}}
+			<div class="form-group {{status}}">
+				<input type="submit" class="btn btn-primary" value="Request lab" id="labs_submit">
+				<label class="control-label" for="labs_submit">{{statusText status}}</label>
+			</div>
+		</fieldset>
+	</form>
+</template>
+
+<template name="labs_item">
+	<div class="form-group" required={{required}}>
+		<label for="{{id}}">{{pretty id}}{{#if required}}<span class="required">*</span>{{/if}}</label>
+		{{#if equals type "text"}}<input type="{{type}}" class="form-control" id="{{id}}">{{/if}}
+		{{#if equals type "picker"}}{{> labs_picker this}}{{/if}}
+		{{#if equals type "select"}}
+			<select class="form-control" id="{{id}}">
+				{{#each items}}
+					<option>{{this}}</option>
+				{{/each}}
+			</select>
+		{{/if}}
+		{{#if equals type "textarea"}}<textarea rows="3" class="form-control" id="{{id}}"></textarea>{{/if}}
+	</div>
+</template>
+
+<template name="labs_picker">
+	<div class="input-group date">
+		<input type="text" class="form-control" id="{{id}}">
+		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	</div>
+</template>
