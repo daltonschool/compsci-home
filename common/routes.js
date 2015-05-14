@@ -6,6 +6,7 @@ Router.configure({
     layoutTemplate: 'layout'
 });
 
+
 Router.route("/assignments/admin", function() {
   // weird workaround for it not recognizing admin
   if (Meteor.userId()) {
@@ -94,6 +95,11 @@ Router.route("/assignments", function() {
 Router.route("/house", function() {
   this.render('house');
 });
+
+Router.route("/labs", function() {
+  this.render('labs_root');
+});
+
 
 Router.route("/", function() {
   this.render("home");
