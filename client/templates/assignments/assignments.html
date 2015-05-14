@@ -163,10 +163,12 @@
           <input type="text" name="name">
         </label>
         <br>
-        <label>
-          Levels (separated by comma)
-          <input type="text" name="levels">
-        </label>
+        <label>Available Points</label>
+        <input type="number" name="pointsAvailable" min="0" max="100">
+        <label>Bonus Points</label>
+        <input type="number" name="bonus" min="0" max="100">
+        <label>Maximum %</label>
+        <input type="number" name="maxPercent" min="0" max="100">
         <br>
         <textarea name="text" class="mkdn"></textarea>
         <input type="submit">
@@ -188,12 +190,14 @@
         </label>
         <input type="text" name="name" value="{{name}}" readonly>
         <br>
-        <label>
-          Levels:
-        </label>
-        <input type="text" name="levels" value="{{join levels}}">
+        <label>Available Points</label>
+        <input type="number" name="pointsAvailable" min="0" max="100" value="{{gradeBreakdown.points}}">
+        <label>Bonus Points</label>
+        <input type="number" name="bonus" min="0" max="100" value="{{gradeBreakdown.bonus}}">
+        <label>Maximum %</label>
+        <input type="number" name="maxPercent" min="0" max="100" value="{{gradeBreakdown.max}}">
         <br>
-        <textarea class="mkdn" name="text">{{trim content}}</textarea>
+        <textarea class="mkdn" name="text">{{content}}</textarea>
         <input type="submit" class="btn btn-primary">
       </form>
     </div>
@@ -268,7 +272,7 @@
           <label>Percent</label><br>
           <input type="number" value="{{submissionInfo.grade.score}}" min="0" max="100" name="percent"> <br>
           <label>Comments</label><br>
-          <textarea name="comments">{{submissionInfo.grade.comments}}</textarea><br>
+          <textarea name="comments" id="comments">{{submissionInfo.grade.comments}}</textarea><br>
           <input type="submit" class="btn btn-default">
         </form>
 

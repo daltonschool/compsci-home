@@ -55,11 +55,7 @@ Router.route("/assignments/:url/edit", function() {
     if (a) {
       this.render("editAssignment", {
         data: function() {
-          return {
-            name: a.name,
-            content: a.history[a.history.length-1].content,
-            url: a.url
-          };
+          return a;
         }
       });
     } else {

@@ -37,9 +37,17 @@ Meteor.methods({
    *  Assignment id
    *  string with new assignment content
    */
-  editAssignment: function(assignmentId, content) {
+  editAssignment: function(assignmentId, u) {
     ifAdmin(Meteor.userId(), function() {
-      Assignments.update(assignmentId, {$push: {history: {content: content, date: new Date()}}});
+      Assignments.update(assignmentId, {
+        $push: {
+          history: {
+            content: u.content,
+            date: new Date()
+          }
+        },
+        $set: { gradeBreakdown: u.gradeBreakdown }
+      });
     });
   },
 

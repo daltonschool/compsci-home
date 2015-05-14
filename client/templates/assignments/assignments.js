@@ -144,6 +144,11 @@ Template.newAssignment.events({
       name: e.target.name.value,
       url: url,
       history: [{content: e.target.text.value.trim(), date: new Date()}],
+      gradeBreakdown: {
+        points: e.target.pointsAvailable.value,
+        bonus: e.target.bonus.value,
+        max: e.target.maxPercent.value
+      },
       dateCreated: new Date()
     }, function(err, result) {
       if (!err)
@@ -162,6 +167,9 @@ Template.editAssignment.helpers({
   },
   "trim": function(s) {
     return s.trim();
+  },
+  content: function() {
+    return this.history[this.history.length-1].content;
   }
 });
 
@@ -169,7 +177,16 @@ Template.editAssignment.events({
   'submit .edit-assignment': function(e) {
     var a =  Assignments.findOne({name: e.target.name.value}); // get the document of the assignment
 
-    Meteor.call('editAssignment',a._id, e.target.text.value.trim(), function(err, result) {
+    var update = {
+      content: e.target.text.value.trim(),
+      gradeBreakdown: {
+        points: e.target.pointsAvailable.value,
+        bonus: e.target.bonus.value,
+        max: e.target.maxPercent.value
+      }
+    };
+
+    Meteor.call('editAssignment',a._id, update, function(err, result) {
       if (!err) {
         Router.go('/assignments/'+ a.url);
       }
@@ -270,5 +287,21 @@ Template.assignmentSubmissions.events({
     });
 
     return false;
+  },
+  'keyup #comments': function(e) {
+    var score = 10;
+    var bonus = 0;
+    var r = /[\-\+]([0-9]+)/g;
+    var matches = e.target.value.match(r) || [];
+    for (var i=0;i<matches.length;i++) {
+      var num = Number(matches[i].slice(1));
+      if (matches[i].charAt(0) == '-')
+        score -= num;
+      else if (matches[i].charAt(0) == '+')
+        bonus += num;
+    }
+    console.log('score:' + score);
+    console.log('bonus:' + bonus);
+
   }
 });
