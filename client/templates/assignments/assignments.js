@@ -289,7 +289,7 @@ Template.assignmentSubmissions.events({
     return false;
   },
   'keyup #comments': function(e) {
-    var score = 10;
+    var score = 0;
     var bonus = 0;
     var r = /[\-\+]([0-9]+)/g;
     var matches = e.target.value.match(r) || [];
@@ -300,8 +300,7 @@ Template.assignmentSubmissions.events({
       else if (matches[i].charAt(0) == '+')
         bonus += num;
     }
-    console.log('score:' + score);
-    console.log('bonus:' + bonus);
-
+    Session.set("score", score);
+    Session.set("bonus", bonus)
   }
 });
