@@ -79,7 +79,7 @@ Meteor.methods({
    * Params:
    *  assignment id
    */
-  delteAssignment: function(assignmentId) {
+  deleteAssignment: function(assignmentId) {
     ifAdmin(Meteor.userId(), function() {
       Assignments.remove(assignmentId);
     });
