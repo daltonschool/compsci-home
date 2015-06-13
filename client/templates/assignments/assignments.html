@@ -155,58 +155,47 @@
 
 <template name="newAssignment">
   {{title 'New Assignment'}}
-  <div class="row">
-    <div class="col-md-6">
-      <form class="new-assignment">
-        <label>
-          Name of Assignment
-          <input type="text" name="name">
-        </label>
-        <br>
-        <label>Available Points</label>
-        <input type="number" name="pointsAvailable" min="0" max="100">
-        <label>Bonus Points</label>
-        <input type="number" name="bonus" min="0" max="100">
-        <label>Maximum %</label>
-        <input type="number" name="maxPercent" min="0" max="100">
-        <br>
-        <textarea name="text" class="mkdn"></textarea>
-        <input type="submit">
-      </form>
-    </div>
-    <div class="col-md-6">
-      {{> upload_bootstrap}}
-    </div>
-  </div>
+  {{> assignmentEditor oldDoc=false}}
 </template>
 
 <template name="editAssignment">
   {{title 'Edit Assignment'}}
+  {{> assignmentEditor oldDoc=true name=name gradeBreakdown=gradeBreakdown content=content}}
+</template>
+
+<template name="assignmentEditor">
+  {{title t}}
   <div class="row">
     <div class="col-md-6">
-      <form class="edit-assignment">
+      <form class="editor">
         <label>
           Name:
         </label>
-        <input type="text" name="name" value="{{name}}" readonly>
+        {{#if oldDoc}}
+          <input type="text" name="name" value="{{name}}" readonly>
+        {{else}}
+          <input type="text" name="name">
+        {{/if}}
         <br>
         <label>Available Points</label>
-        <input type="number" name="pointsAvailable" min="0" max="100" value="{{gradeBreakdown.points}}">
+        <input type="number" name="pointsAvailable" min="0" max="100" value="{{#if oldDoc}}{{gradeBreakdown.points}}{{/if}}">
         <label>Bonus Points</label>
-        <input type="number" name="bonus" min="0" max="100" value="{{gradeBreakdown.bonus}}">
+        <input type="number" name="bonus" min="0" max="100" value="{{#if oldDoc}}{{gradeBreakdown.bonus}}{{/if}}">
         <label>Maximum %</label>
-        <input type="number" name="maxPercent" min="0" max="100" value="{{gradeBreakdown.max}}">
+        <input type="number" name="maxPercent" min="0" max="100" value="{{#if oldDoc}}{{gradeBreakdown.max}}{{/if}}">
         <br>
-        <textarea class="mkdn" name="text">{{content}}</textarea>
+        <textarea class="mkdn" name="text">{{#if oldDoc}}{{content}}{{/if}}</textarea>
         <input type="submit" class="btn btn-primary">
       </form>
     </div>
     <div class="col-md-5">
-      <button class="btn btn-danger delete" id="{{_id}}">Delete Assignment</button>
+      {{#if oldDoc}}
+        <button class="btn btn-danger delete" id="{{_id}}">Delete Assignment</button>
+      {{/if}}
+      <!--Upload photo assets for the assignment-->
       {{> upload_bootstrap}}
     </div>
   </div>
-
 </template>
 
 <template name="assignment">

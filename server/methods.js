@@ -26,37 +26,42 @@ Meteor.methods({
    **********************************/
 
   /*
-   * Add a new assignment.
+   * Edit or add a new assignment.
    * Params:
-   *  Prospective assignment object.
+   *  Prospective assignment object with
+   *    name
+   *    content
+   *    grading info.
+   *  if an assignment with that name exists, update it.
+   *  else, create a new assignment.
    */
-  addAssignment: function(a) {
+  addOrUpdateAssignment: function(a) {
     ifAdmin(Meteor.userId(), function() {
-      if (Assignments.findOne({name: a.name}))
-        throw new Meteor.Error(409, 'assignment with this name already exists.');
-      else {
-        Assignments.insert(a);
-      }
-    });
-  },
-  /*
-   * Modify an assignment.
-   * Params:
-   *  Assignment id
-   *  string with new assignment content
-   */
-  editAssignment: function(assignmentId, u) {
-    ifAdmin(Meteor.userId(), function() {
-      Assignments.update(assignmentId, {
-        $push: {
-          history: {
-            content: u.content,
-            date: new Date()
+      var doc = Assignments.findOne({name: a.name}); // get the db entry
+      if (doc) {
+        Assignments.update(doc._id, { // update the entry
+          $push: {
+            history: {
+              content: a.content,
+              date: new Date()
+            }
+          },
+          $set: {
+            gradeBreakdown: a.gradeBreakdown
           }
-        },
-        $set: { gradeBreakdown: u.gradeBreakdown }
-      });
-    });
+        });
+        return doc;
+      }
+      else {
+        a.history = [{content: a.content, date: new Date()}];
+        a.content = undefined;
+        a.url = a.name.toLowerCase().replace(/ /g, '-');
+        a.dateCreated = new Date();
+        doc = a;
+        Assignments.insert(a);
+        return a;
+      }
+    })
   },
 
   /*

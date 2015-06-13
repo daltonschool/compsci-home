@@ -23,7 +23,11 @@ Router.route("/assignments/admin", function() {
 
 Router.route("/assignments/new", function() {
   if (Roles.userIsInRole(Meteor.userId(), 'admin'))
-    this.render("newAssignment");
+    this.render("assignmentEditor", {
+      data: function() {
+        return {oldDoc: false, t: "! New Assignment"}
+      }
+    });
   else
     this.redirect("/assignments");
 });
@@ -53,8 +57,10 @@ Router.route("/assignments/:url", function() {
 Router.route("/assignments/:url/edit", function() {
   if (Roles.userIsInRole(Meteor.userId(), 'admin')) {
     var a = Assignments.findOne({url: this.params.url});
+    a.oldDoc = true;
+    a.t = "! Edit Assignment";
     if (a) {
-      this.render("editAssignment", {
+      this.render("assignmentEditor", {
         data: function() {
           return a;
         }

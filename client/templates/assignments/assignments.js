@@ -135,49 +135,10 @@ Template.adminPanel.events({
   }
 });
 
-Template.newAssignment.events({
-  "submit .new-assignment": function(e) {
-    e.preventDefault();
-    var url = e.target.name.value.toLowerCase().replace(/ /g, '-');
-
-    Meteor.call('addAssignment', {
+Template.assignmentEditor.events({
+  'submit .editor': function(e) {
+    var assignment = {
       name: e.target.name.value,
-      url: url,
-      history: [{content: e.target.text.value.trim(), date: new Date()}],
-      gradeBreakdown: {
-        points: e.target.pointsAvailable.value,
-        bonus: e.target.bonus.value,
-        max: e.target.maxPercent.value
-      },
-      dateCreated: new Date()
-    }, function(err, result) {
-      if (!err)
-        Router.go("/assignments/"+url);
-      else
-        Router.go("/assignments");
-    });
-    return false;
-  },
-  'keydown textarea': textareaTab
-});
-
-Template.editAssignment.helpers({
-  "join": function(d) {
-    return d.join(', ');
-  },
-  "trim": function(s) {
-    return s.trim();
-  },
-  content: function() {
-    return this.history[this.history.length-1].content;
-  }
-});
-
-Template.editAssignment.events({
-  'submit .edit-assignment': function(e) {
-    var a =  Assignments.findOne({name: e.target.name.value}); // get the document of the assignment
-
-    var update = {
       content: e.target.text.value.trim(),
       gradeBreakdown: {
         points: e.target.pointsAvailable.value,
@@ -186,21 +147,28 @@ Template.editAssignment.events({
       }
     };
 
-    Meteor.call('editAssignment',a._id, update, function(err, result) {
+    Meteor.call('addOrUpdateAssignment', assignment, function(err, result) {
+      console.log(result);
       if (!err) {
-        Router.go('/assignments/'+ a.url);
+        Router.go('/assignments/');
       }
     });
     return false;
   },
   'click .delete': function(e) {
-    Meteor.call('deleteAssignment', e.target.id, function(err, result) {
+    Meteor.call('deleteAssignment', this._id, function(err, result) {
       if (!err) {
         Router.go('/assignments');
       }
     });
   },
   'keydown textarea': textareaTab
+});
+
+Template.assignmentEditor.helpers({
+  content: function() {
+    return this.history[this.history.length-1].content;
+  }
 });
 
 function textareaTab(e) {
