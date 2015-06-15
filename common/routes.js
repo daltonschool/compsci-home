@@ -82,7 +82,8 @@ Router.route("/assignments/:url/submissions", function() {
         data: function () {
           return {
             submission: Submissions.find({assignment: a._id}),
-            assignment: a._id
+            assignment: a._id,
+            breakdown: a.gradeBreakdown
           }
         }
       });
