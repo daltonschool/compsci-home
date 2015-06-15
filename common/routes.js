@@ -6,7 +6,6 @@ Router.configure({
     layoutTemplate: 'layout'
 });
 
-
 Router.route("/assignments/admin", function() {
   // weird workaround for it not recognizing admin
   if (Meteor.userId()) {
@@ -107,18 +106,18 @@ Router.route("/labs", function() {
   this.render('labs_root');
 });
 
-Router.route("/submissions/assignments/:_id.java", function() {
+Router.route("/submissions/assignments/:filename", function() {
   var fs = Npm.require('fs');
-  var file = process.env.PWD + "/.uploads/assignments/" + this.params._id + ".java";
+  var file = process.env.PWD + "/.uploads/assignments/" + this.params.filename;
   var stat = null;
   try {
     stat = fs.statSync(file);
   } catch (_error) {
     this.response.statusCode = 404;
-    this.response.end();
+    this.response.end(this.params.filename + " does not exist. sorry!");
     return;
   }
-  var attachmentFilename = this.params._id+'.java';
+  var attachmentFilename = this.params.filename;
   // Set the headers
   this.response.writeHead(200, {
     'Content-Type': 'application/java',
