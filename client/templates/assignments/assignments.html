@@ -177,12 +177,8 @@
           <input type="text" name="name">
         {{/if}}
         <br>
-        <label>Available Points</label>
-        <input type="number" name="pointsAvailable" min="0" max="100" value="{{#if oldDoc}}{{gradeBreakdown.points}}{{/if}}">
-        <label>Bonus Points</label>
-        <input type="number" name="bonus" min="0" max="100" value="{{#if oldDoc}}{{gradeBreakdown.bonus}}{{/if}}">
-        <label>Maximum %</label>
-        <input type="number" name="maxPercent" min="0" max="100" value="{{#if oldDoc}}{{gradeBreakdown.max}}{{/if}}">
+        <label>Starting %</label>
+        <input type="number" name="startingPoints" min="0" max="100" value="{{#if oldDoc}}{{gradeBreakdown.points}}{{/if}}">
         <br>
         <textarea class="mkdn" name="text">{{#if oldDoc}}{{content}}{{/if}}</textarea>
         <input type="submit" class="btn btn-primary">

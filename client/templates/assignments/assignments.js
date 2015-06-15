@@ -141,9 +141,7 @@ Template.assignmentEditor.events({
       name: e.target.name.value,
       content: e.target.text.value.trim(),
       gradeBreakdown: {
-        points: e.target.pointsAvailable.value,
-        bonus: e.target.bonus.value,
-        max: e.target.maxPercent.value
+        points: e.target.startingPoints.value
       }
     };
 
