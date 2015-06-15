@@ -234,6 +234,12 @@ Template.assignmentSubmissions.helpers({
       // computationally, would be better to do s.pop(), but I'm not sure if object is mutable.
       return s.files[s.files.length-1];
     }
+  },
+  score: function() {
+    if (Session.get('score') !== undefined)
+      return parseInt(this.breakdown.points) + Session.get('score') + Session.get('bonus');
+    else
+      return Session.get('submissionInfo').grade.score;
   }
 });
 
@@ -252,6 +258,8 @@ Template.assignmentSubmissions.events({
       timestamp: new Date()
     });
 
+    Session.set('submissionInfo', undefined);
+
     return false;
   },
   'keyup #comments': function(e) {
@@ -268,5 +276,6 @@ Template.assignmentSubmissions.events({
     }
     Session.set("score", score);
     Session.set("bonus", bonus)
-  }
+  },
+  'keydown textarea': textareaTab
 });
