@@ -255,9 +255,9 @@
 
         <form id="grading">
           <label>Percent</label><br>
-          <input type="number" value="{{submissionInfo.grade.score}}" min="0" max="100" name="percent"> <br>
+          <input type="number" readonly value="{{score}}" min="0" max="100" name="percent">% <br>
           <label>Comments</label><br>
-          <textarea name="comments" id="comments">{{submissionInfo.grade.comments}}</textarea><br>
+          <textarea class="mkdn" name="comments" id="comments">{{submissionInfo.grade.comments}}</textarea><br>
           <input type="submit" class="btn btn-default">
         </form>
 
