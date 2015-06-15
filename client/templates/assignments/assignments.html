@@ -250,7 +250,7 @@
     <div class="col-md-9">
       {{#if submissionInfo}}
         <h3>Submission from {{userInfo submissionInfo.user 'fullname'}}</h3>
-        File path: {{mostRecentSubmission.path}}
+        File path: <a href="/submissions/{{mostRecentSubmission.path}}">{{mostRecentSubmission.path}}</a>
         Timestamp: {{mostRecentSubmission.timestamp}}
 
         <form id="grading">
