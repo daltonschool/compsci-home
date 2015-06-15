@@ -107,6 +107,26 @@ Router.route("/labs", function() {
   this.render('labs_root');
 });
 
+Router.route("/submissions/assignments/:_id.java", function() {
+  var fs = Npm.require('fs');
+  var file = process.env.PWD + "/.uploads/assignments/" + this.params._id + ".java";
+  var stat = null;
+  try {
+    stat = fs.statSync(file);
+  } catch (_error) {
+    this.response.statusCode = 404;
+    this.response.end();
+    return;
+  }
+  var attachmentFilename = this.params._id+'.java';
+  // Set the headers
+  this.response.writeHead(200, {
+    'Content-Type': 'application/java',
+    'Content-Disposition': 'attachment; filename=' + attachmentFilename,
+    'Content-Length': stat.size
+  });
+  fs.createReadStream(file).pipe(this.response);
+}, {where: 'server'});
 
 Router.route("/", function() {
   this.render("home");
