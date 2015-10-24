@@ -103,7 +103,7 @@ Router.route("/house", function() {
 });
 
 Router.route("/labs", function() {
-  this.render('labs_root');
+  this.render('youcanbookme');
 });
 
 Router.route("/submissions/assignments/:filename", function() {
