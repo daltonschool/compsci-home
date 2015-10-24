@@ -189,7 +189,15 @@
         <button class="btn btn-danger delete" id="{{_id}}">Delete Assignment</button>
       {{/if}}
       <!--Upload photo assets for the assignment-->
-      {{> upload_bootstrap}}
+      {{> upload_bootstrap callbacks=uploadCallbacks}}
+      <hr>
+      <h4>Uploaded images:</h4>
+      <ul>
+        {{# each files}}
+          <li><code>/assets/{{.}}</code></li>
+        {{/each}}
+      </ul>
+
     </div>
   </div>
 </template>

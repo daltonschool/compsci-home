@@ -273,5 +273,9 @@ Meteor.methods({
       topic: data.topic, start: data.start, duration: data.duration,
       instructor: data.instructor, comments: data.comments
     });
+  },
+  getAssets: function() {
+    var fs = Npm.require('fs');
+    return fs.readdirSync(process.env.PWD + "/.uploads/assets/");
   }
 });

@@ -107,25 +107,34 @@ Router.route("/labs", function() {
 });
 
 Router.route("/submissions/assignments/:filename", function() {
+  downloadFile(process.env.PWD + "/.uploads/assignments/" + this.params.filename, this.params.filename, this.response);
+}, {where: 'server'});
+
+Router.route("/assets/:filename", function() {
+  downloadFile(process.env.PWD + "/.uploads/assets/" + this.params.filename, this.params.filename, this.response);
+}, {where: 'server'});
+
+function downloadFile(path, filename, res) {
   var fs = Npm.require('fs');
-  var file = process.env.PWD + "/.uploads/assignments/" + this.params.filename;
+  var file = path;
   var stat = null;
+  var extension = filename.split('.').pop();
   try {
     stat = fs.statSync(file);
   } catch (_error) {
     this.response.statusCode = 404;
-    this.response.end(this.params.filename + " does not exist. sorry!");
+    this.response.end(filename + " does not exist. sorry!");
     return;
   }
-  var attachmentFilename = this.params.filename;
+  var attachmentFilename = filename;
   // Set the headers
-  this.response.writeHead(200, {
-    'Content-Type': 'application/java',
+  res.writeHead(200, {
+    'Content-Type': 'application/'+extension,
     'Content-Disposition': 'attachment; filename=' + attachmentFilename,
     'Content-Length': stat.size
   });
-  fs.createReadStream(file).pipe(this.response);
-}, {where: 'server'});
+  fs.createReadStream(file).pipe(res);
+}
 
 Router.route("/", function() {
   this.render("home");

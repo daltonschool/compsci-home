@@ -8,14 +8,14 @@ Meteor.startup(function() {
     uploadDir: process.env.PWD + '/.uploads',
     checkCreateDirectories: true,
     getDirectory: function(fileInfo, formData) {
-      if (formData.type == 'assignment')
+      if (formData && formData.type == 'assignment')
         return 'assignments';
       else
         return 'assets';
     },
     getFileName: function(fileInfo, formData) {
       var extension = '.'+fileInfo.name.split('.').pop();
-      if (formData.type == 'assignment') {
+      if (formData && formData.type == 'assignment') {
         return Math.abs((fileInfo.name+ Date.now()).hashCode()).toString(16) +extension;
       } else {
         return fileInfo.name;
