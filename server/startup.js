@@ -1,7 +1,11 @@
 /**
  * Created by davis on 3/17/15.
  */
-
+S3.config = {
+  key: process.env.S3_KEY,
+  secret: process.env.S3_SECRET,
+  bucket: 'dcshome'
+};
 Meteor.startup(function() {
   UploadServer.init({
     tmpDir: process.env.PWD + '/.uploads/tmp',

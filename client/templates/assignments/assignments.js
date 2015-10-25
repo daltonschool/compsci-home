@@ -260,8 +260,8 @@ Template.assignmentSubmissions.helpers({
 
 Template.assignmentSubmissions.events({
   'click button.student': function(e) {
-    /* get the data that was used to render that button
-     * i.e. the element of the submissions array, with the fileInfo history.
+    /* get the data that was used to render that button, which is
+     * the element of the submissions array corresponding to the student's submission for that assignment.
      */
     Session.set('submissionInfo', Blaze.getData(e.target));
   },

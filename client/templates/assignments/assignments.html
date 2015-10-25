@@ -239,10 +239,18 @@
     <div class="col-md-8 col-md-offset-2 assignment_submission">
       {{#if currentUser}}
          <h3>Submit Assignment Here</h3>
-        {{> upload_bootstrap multiple=true callbacks=assignmentSubmit formData=assignmentData}}
+        {{> upload_s3 directory="assignments" assignment_id=_id}}
       {{/if}}
     </div>
   </div>
+</template>
+
+<template name="upload_s3">
+  <input type="file" class="file_bag">
+  <button class="upload">Upload</button>
+  {{#each files}}
+    <p>{{percent_uploaded}}</p>
+  {{/each}}
 </template>
 
 <template name="assignmentSubmissions">
@@ -258,7 +266,7 @@
     <div class="col-md-9">
       {{#if submissionInfo}}
         <h3>Submission from {{userInfo submissionInfo.user 'fullname'}}</h3>
-        File path: <a href="/submissions/{{mostRecentSubmission.path}}">{{mostRecentSubmission.path}}</a>
+        File path: <a href="{{mostRecentSubmission.url}}">{{mostRecentSubmission.url}}</a>
         Timestamp: {{mostRecentSubmission.timestamp}}
 
         <form id="grading">

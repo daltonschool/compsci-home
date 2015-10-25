@@ -175,11 +175,10 @@ Meteor.methods({
     fileInfo.date = new Date(); // add the date to the fileInfo
     if (Meteor.userId()) {
       var s = Submissions.findOne({user: Meteor.userId(), assignment: assignmentInfo._id});
-      // TODO: Allow user to view all their submissions in one place.
       fileInfo.timestamp = new Date();
       if (s) {
-        Submissions.update(s._id, {$push: {files: fileInfo}});
-      } else {
+        Submissions.update(s._id, {$push: {files: fileInfo}}); // push the newest file onto the submission
+      } else { // insert a new submission with the file.
         Submissions.insert({
           user: Meteor.userId(),
           assignment: assignmentInfo._id,
