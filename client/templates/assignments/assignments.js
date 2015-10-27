@@ -5,6 +5,7 @@
 Meteor.subscribe("assignments");
 Meteor.subscribe("courses");
 Meteor.subscribe("submissions");
+Meteor.subscribe("assets");
 
 Session.setDefault("course", undefined);
 Session.setDefault("edit", false);
@@ -162,25 +163,13 @@ Template.assignmentEditor.events({
   },
   'keydown textarea': textareaTab
 });
-Meteor.call('getAssets', function(err, result) {
-  Session.set("assets", result);
-});
 
 Template.assignmentEditor.helpers({
   content: function() {
     return this.history[this.history.length-1].content;
   },
   files: function() {
-    return Session.get("assets");
-  },
-  uploadCallbacks: function() {
-    return {
-      finished: function() {
-        Meteor.call('getAssets', function(err, result) {
-          Session.set("assets", result);
-        });
-      }
-    }
+    return SiteAssets.find({});
   }
 });
 

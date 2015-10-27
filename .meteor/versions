@@ -105,8 +105,6 @@ standard-minifiers@1.0.1
 stylus@2.511.0_2
 templating@1.1.4
 templating-tools@1.0.0
-tomi:upload-jquery@2.2.0
-tomi:upload-server@1.3.2
 tracker@1.0.9
 tsega:bootstrap3-datetimepicker@4.17.37_1
 twbs:bootstrap@3.3.5

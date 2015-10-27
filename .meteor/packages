@@ -21,8 +21,6 @@ ian:accounts-ui-bootstrap-3
 force-ssl
 davish:accounts-dalton
 http
-tomi:upload-server
-tomi:upload-jquery
 cfs:standard-packages
 cfs:filesystem
 raix:ui-dropped-event

@@ -26,6 +26,10 @@ Meteor.publish('submissions', function() {
     return Submissions.find({user: this.userId});
 });
 
+Meteor.publish('assets', function() {
+  return SiteAssets.find({});
+});
+
 Meteor.publish('courses', function() {
   // only give access to course list if they're an admin.
   if (Roles.userIsInRole(this.userId, 'admin'))

@@ -273,8 +273,7 @@ Meteor.methods({
       instructor: data.instructor, comments: data.comments
     });
   },
-  getAssets: function() {
-    var fs = Npm.require('fs');
-    return fs.readdirSync(process.env.PWD + "/.uploads/assets/");
+  uploadAsset: function(asst) {
+    SiteAssets.insert(asst);
   }
 });
