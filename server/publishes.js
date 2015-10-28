@@ -41,3 +41,7 @@ Meteor.publish('courses', function() {
       return [];
   }
 });
+
+Meteor.publish("allUserData", function () {
+  return Meteor.users.find({});
+});
