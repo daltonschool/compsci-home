@@ -20,10 +20,10 @@ Meteor.publish('assignments', function() {
 });
 
 Meteor.publish('submissions', function() {
-  if (Roles.userIsInRole(this.userId, 'admin'))
+  //if (Roles.userIsInRole(this.userId, 'admin'))
     return Submissions.find({});
-  else
-    return Submissions.find({user: this.userId});
+  //else
+    //return Submissions.find({user: this.userId});
 });
 
 Meteor.publish('assets', function() {
@@ -40,4 +40,8 @@ Meteor.publish('courses', function() {
     else
       return [];
   }
+});
+
+Meteor.publish("allUserData", function () {
+  return Meteor.users.find({});
 });

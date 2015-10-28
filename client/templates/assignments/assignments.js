@@ -6,6 +6,7 @@ Meteor.subscribe("assignments");
 Meteor.subscribe("courses");
 Meteor.subscribe("submissions");
 Meteor.subscribe("assets");
+Meteor.subscribe("allUserData");
 
 Session.setDefault("course", undefined);
 Session.setDefault("edit", false);
@@ -224,6 +225,7 @@ Template.assignment.onRendered(function() {
 Template.assignmentSubmissions.helpers({
   userInfo: function(id, field) {
     var u = Meteor.users.findOne(id);
+    console.log(u);
     if (u[field])
       return u[field];
     else
