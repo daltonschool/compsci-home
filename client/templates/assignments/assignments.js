@@ -276,7 +276,8 @@ Template.assignmentSubmissions.helpers({
     return subs;
   },
   submissionInfo: function() {
-    return Session.get('u').submission;
+    if (Session.get('u'))
+      return Session.get('u').submission;
   },
   mostRecentSubmission: function() {
     var s = Session.get('u').submission;
@@ -290,6 +291,25 @@ Template.assignmentSubmissions.helpers({
   },
   hasntGraded: function(u) {
     return u.submission.grade.score === null;
+  },
+  notSubmitted: function(u) {
+    return u.submission === null;
+  },
+  show: function() {
+    if (Session.get('nosub'))
+      return this.submission === null;
+    else if (Session.get('filter'))
+      return this.submission.grade.score === null;
+     else
+      return true;
+  },
+  glyph: function() {
+    if (this.submission === null)
+      return "glyphicon glyphicon-remove-circle";
+    else if (this.submission.grade.score === null)
+      return "glyphicon glyphicon-exclamation-sign";
+    else
+      return "glyphicon glyphicon-ok-circle";
   },
   comments: function() {
     var u = Session.get('u');
@@ -326,12 +346,16 @@ Template.assignmentSubmissions.helpers({
   },
   filter: function() {
     return Session.get('filter');
+  },
+  nosub: function() {
+    return Session.get('nosub');
   }
 });
 
 Template.assignmentSubmissions.onRendered(function() {
   Session.set('u', undefined);
   Session.set('filter', false);
+  Session.set('nosub', false);
 });
 
 Template.assignmentSubmissions.events({
@@ -356,6 +380,10 @@ Template.assignmentSubmissions.events({
   },
   'click #filter': function() {
     Session.set('filter', !Session.get('filter'));
+  },
+  'click #nosub': function() {
+    Session.set('nosub', !Session.get('nosub'));
+    Session.set('filter', false);
   },
   'keyup #comments': function(e) {
     var score = 0;

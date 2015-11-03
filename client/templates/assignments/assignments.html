@@ -275,24 +275,22 @@
 <template name="assignmentSubmissions">
   <div class="row">
     <div class="col-md-3">
+
+      <button class="btn btn-default" id="nosub">
+        {{#if nosub}}Show submissions{{else}}Show students who haven't submitted.{{/if}}
+      </button>
+      {{#if nosub}}{{else}}
       <button class="btn btn-default" id="filter">
         {{#if filter}}Show all submissions{{else}}Show submissions without a grade{{/if}}
       </button>
+      {{/if}}
       <h3>Submissions Recieved</h3>
       <ul>
         {{#each submission}}
-          {{#if filter}}
-            {{#if hasntGraded .}}
-              <li>
-                <button class="btn btn-link student" id="{{submission.user}}">
-                  {{userNameInfo username 'fullname'}}
-                </button>
-              </li>
-            {{/if}}
-            {{else}}
+          {{#if show .}}
             <li>
-              <button class="btn btn-link student" id="{{submission.user}}">
-                {{userNameInfo username 'fullname'}}
+              <button class="btn btn-link student" id="{{user}}">
+                {{userNameInfo username 'fullname'}} <span class="{{glyph}}"></span>
               </button>
             </li>
           {{/if}}
