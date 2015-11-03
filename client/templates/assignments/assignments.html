@@ -275,14 +275,27 @@
 <template name="assignmentSubmissions">
   <div class="row">
     <div class="col-md-3">
+      <button class="btn btn-default" id="filter">
+        {{#if filter}}Show all submissions{{else}}Show submissions without a grade{{/if}}
+      </button>
       <h3>Submissions Recieved</h3>
       <ul>
         {{#each submission}}
-          <li>
-            <button class="btn btn-link student" id="{{submission.user}}">
-              {{userNameInfo username 'fullname'}}
-            </button>
-          </li>
+          {{#if filter}}
+            {{#if hasntGraded submission}}
+              <li>
+                <button class="btn btn-link student" id="{{submission.user}}">
+                  {{userNameInfo username 'fullname'}}
+                </button>
+              </li>
+            {{/if}}
+            {{else}}
+            <li>
+              <button class="btn btn-link student" id="{{submission.user}}">
+                {{userNameInfo username 'fullname'}}
+              </button>
+            </li>
+          {{/if}}
         {{/each}}
       </ul>
     </div>
@@ -292,7 +305,7 @@
         File path: <a href="{{mostRecentSubmission.url}}" download>{{mostRecentSubmission.url}}</a>
         <br>
         Timestamp: {{mostRecentSubmission.timestamp}}
-        {{#if hasntGraded}}
+        {{#if hasntGraded subs}}
           <div class="alert alert-warning">You have not graded this submission yet.</div>
         {{/if}}
         <br>

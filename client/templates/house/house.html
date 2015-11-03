@@ -11,11 +11,11 @@
   <tbody>
   {{#each submission}}
     <tr>
-      <td>{{getName assignment}}</td>
-      <td>{{#if grade.comments}}
+      <td><a href="/assignments/{{getAsstUrl assignment}}">{{getName assignment}}</a></td>
+      <td>{{#if hasBeenGraded grade}}
         {{#markdown}}{{grade.comments}}{{/markdown}}
       {{else}} N/A{{/if}}</td>
-      <td>{{#if grade.score}}{{grade.score}}% {{else}} N/A{{/if}}</td>
+      <td>{{#if hasBeenGraded grade}}{{grade.score}}% {{else}} N/A{{/if}}</td>
     </tr>
   {{/each}}
   </tbody>

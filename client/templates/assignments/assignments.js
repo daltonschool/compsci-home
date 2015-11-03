@@ -288,8 +288,7 @@ Template.assignmentSubmissions.helpers({
   subs: function() {
     return Session.get('u');
   },
-  hasntGraded: function() {
-    var u = Session.get('u');
+  hasntGraded: function(u) {
     return u.submission.grade.score === null;
   },
   comments: function() {
@@ -324,7 +323,15 @@ Template.assignmentSubmissions.helpers({
       return u.submission.lastSubmission.grade.score;
     else
       return false;
+  },
+  filter: function() {
+    return Session.get('filter');
   }
+});
+
+Template.assignmentSubmissions.onRendered(function() {
+  Session.set('u', undefined);
+  Session.set('filter', false);
 });
 
 Template.assignmentSubmissions.events({
@@ -346,6 +353,9 @@ Template.assignmentSubmissions.events({
     Session.set('u', undefined);
 
     return false;
+  },
+  'click #filter': function() {
+    Session.set('filter', !Session.get('filter'));
   },
   'keyup #comments': function(e) {
     var score = 0;
