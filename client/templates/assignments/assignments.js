@@ -239,17 +239,48 @@ Template.assignment.onRendered(function() {
 Template.assignmentSubmissions.helpers({
   userInfo: function(id, field) {
     var u = Meteor.users.findOne(id);
-    console.log(u);
     if (u[field])
       return u[field];
     else
       return u.profile[field];
   },
+  userNameInfo: function(name, field) {
+    var u = Meteor.users.findOne({username: name});
+    if (u[field])
+      return u[field];
+    else
+      return u.profile[field];
+  },
+  submission: function() {
+    var classes = Courses.find({assignments: this.assignment_id}).fetch();
+    var assignment_id = this.assignment_id;
+    var subs = []; // each entry is a dictionary with username, a course ID and a 'submission' object.
+    // This can be null if user hasn't submitted.
+    for (var i = 0; i < classes.length; i++) { // for every class that uses this assignment:
+      var studs = classes[i].students;
+      for (var j = 0; j < studs.length; j++) { // for every student in that class:
+        var student_name = studs[j].username;
+
+        // this is the entry for the `subs` array that is eventually returned
+        var sub = {"username": student_name, "course": classes[i]._id, 'submission': null};
+        // find the most recent submission from that student, sorted by "timestamp" descending.
+        var s = Submissions.findOne({
+          "assignment": assignment_id, "username": student_name
+        }, {sort: [["timestamp", "desc"]]});
+
+        if (s)
+          sub['submission'] = s; // if that returned something, attach it to the object.
+        subs.push(sub);
+      }
+    }
+    //console.log(subs);
+    return subs;
+  },
   submissionInfo: function() {
-    return Session.get('submissionInfo');
+    return Session.get('submissionInfo').submission;
   },
   mostRecentSubmission: function() {
-    var s = Session.get('submissionInfo');
+    var s = Session.get('submissionInfo').submission;
     if (s) {
       // computationally, would be better to do s.pop(), but I'm not sure if object is mutable.
       return s.files[s.files.length-1];
@@ -272,7 +303,7 @@ Template.assignmentSubmissions.events({
   },
   'submit #grading': function(e) {
     e.preventDefault();
-    Meteor.call('updateGrade', this.assignment, {
+    Meteor.call('updateGrade', this.assignment_id, {
       score: e.target.percent.value,
       comments: e.target.comments.value,
       timestamp: new Date()

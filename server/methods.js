@@ -182,6 +182,7 @@ Meteor.methods({
       } else { // insert a new submission with the file.
         Submissions.insert({
           user: Meteor.userId(),
+          username: Meteor.user().username,
           assignment: assignmentInfo._id,
           files: [fileInfo],
           grade: {score: null, comments: ""}

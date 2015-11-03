@@ -274,13 +274,17 @@
       <h3>Submissions Recieved</h3>
       <ul>
         {{#each submission}}
-          <li><button class="btn btn-link student" id="{{user}}">{{userInfo user 'fullname'}}</button></li>
+          <li>
+            <button class="btn btn-link student" id="{{submission.user}}">
+              {{userNameInfo username 'fullname'}}
+            </button>
+          </li>
         {{/each}}
       </ul>
     </div>
     <div class="col-md-9">
       {{#if submissionInfo}}
-        <h3>Submission from {{userInfo submissionInfo.user 'fullname'}}</h3>
+        <h3>Submission from {{userNameInfo submissionInfo.username 'fullname'}}</h3>
         File path: <a href="{{mostRecentSubmission.url}}">{{mostRecentSubmission.url}}</a>
         Timestamp: {{mostRecentSubmission.timestamp}}
 
