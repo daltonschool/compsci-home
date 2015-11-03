@@ -264,7 +264,11 @@
   <input type="file" class="file_bag">
   <button class="upload">Upload</button>
   {{#each files}}
-    <p>{{percent_uploaded}}</p>
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="{{percent_uploaded}}" aria-valuemin="0" aria-valuemax="100" style="width: {{percent_uploaded}}%;">
+        <span class="sr-only">{{percent_uploaded}}% Complete</span>
+      </div>
+    </div>
   {{/each}}
 </template>
 
@@ -283,20 +287,33 @@
       </ul>
     </div>
     <div class="col-md-9">
+      <h3>Submission from {{userNameInfo subs.username 'fullname'}}</h3>
       {{#if submissionInfo}}
-        <h3>Submission from {{userNameInfo submissionInfo.username 'fullname'}}</h3>
-        File path: <a href="{{mostRecentSubmission.url}}">{{mostRecentSubmission.url}}</a>
+        File path: <a href="{{mostRecentSubmission.url}}" download>{{mostRecentSubmission.url}}</a>
+        <br>
         Timestamp: {{mostRecentSubmission.timestamp}}
+        {{#if hasntGraded}}
+          <div class="alert alert-warning">You have not graded this submission yet.</div>
+        {{/if}}
+        <br>
+        {{#if prevScore}}
+          On a previous submission, {{userNameInfo subs.username 'fullname'}} recieved a grade of {{prevScore}}%.
+        {{/if}}
+
 
         <form id="grading">
           <label>Percent</label><br>
           <input type="number" readonly value="{{score}}" min="0" max="100" name="percent">% <br>
           <label>Comments</label><br>
-          <textarea class="mkdn" name="comments" id="comments">{{submissionInfo.grade.comments}}</textarea><br>
+          <textarea class="mkdn" name="comments" id="comments">{{comments}}</textarea><br>
           <input type="submit" class="btn btn-default">
         </form>
 
+        {{else}}
+        <h6>User has not submitted a file for this assignment.</h6>
+
       {{/if}}
+
     </div>
   </div>
 </template>

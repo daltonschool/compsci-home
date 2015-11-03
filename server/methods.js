@@ -175,27 +175,25 @@ Meteor.methods({
   uploadAssignment: function(assignmentInfo, fileInfo) {
     fileInfo.date = new Date(); // add the date to the fileInfo
     if (Meteor.userId()) {
-      var s = Submissions.findOne({user: Meteor.userId(), assignment: assignmentInfo._id});
       fileInfo.timestamp = new Date();
-      if (s) {
-        Submissions.update(s._id, {$push: {files: fileInfo}}); // push the newest file onto the submission
-      } else { // insert a new submission with the file.
-        Submissions.insert({
-          user: Meteor.userId(),
-          username: Meteor.user().username,
-          assignment: assignmentInfo._id,
-          files: [fileInfo],
-          grade: {score: null, comments: ""}
-        });
-      }
+      var s = Submissions.findOne({user: Meteor.userId(), assignment: assignmentInfo._id}, {sort: [['timestamp', 'desc']]});
+      Submissions.insert({
+        user: Meteor.userId(),
+        username: Meteor.user().username,
+        assignment: assignmentInfo._id,
+        file: fileInfo,
+        grade: {score: null, comments: ""},
+        timestamp: new Date(),
+        lastSubmission: s
+      });
     } else {
       throw new Meteor.Error('403', 'Must be logged in to upload.');
     }
   },
 
-  updateGrade: function(assignmentId, data) {
+  updateGrade: function(assignmentId, submission_id, data) {
     ifAdmin(Meteor.userId(), function() {
-      Submissions.update({assignment: assignmentId, user: Meteor.userId()}, {
+      Submissions.update(submission_id, {
         $set: {grade: data}
       });
     });

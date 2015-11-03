@@ -273,24 +273,57 @@ Template.assignmentSubmissions.helpers({
         subs.push(sub);
       }
     }
-    //console.log(subs);
     return subs;
   },
   submissionInfo: function() {
-    return Session.get('submissionInfo').submission;
+    return Session.get('u').submission;
   },
   mostRecentSubmission: function() {
-    var s = Session.get('submissionInfo').submission;
+    var s = Session.get('u').submission;
     if (s) {
       // computationally, would be better to do s.pop(), but I'm not sure if object is mutable.
-      return s.files[s.files.length-1];
+      return s.file;
+    }
+  },
+  subs: function() {
+    return Session.get('u');
+  },
+  hasntGraded: function() {
+    var u = Session.get('u');
+    return u.submission.grade.score === null;
+  },
+  comments: function() {
+    var u = Session.get('u');
+
+    // if this assignment has been graded before, show the new grade.
+    if (u.submission.grade.score) {
+      return u.submission.grade.comments;
+    }
+    // if it hasn't, show the old grade, and the grader can work from there.
+    else if (u.submission.lastSubmission && u.submission.lastSubmission.grade.comments) {
+      return u.submission.lastSubmission.grade.comments;
+    }
+    else {
+      return "";
     }
   },
   score: function() {
+    var u = Session.get('u');
     if (Session.get('score') !== undefined)
       return parseInt(this.breakdown.points) + Session.get('score') + Session.get('bonus');
+    else if (u.submission.grade.score)
+      return u.submission.grade.score;
+    else if (u.submission.lastSubmission && u.submission.lastSubmission.grade.score)
+      return u.submission.lastSubmission.grade.score;
     else
-      return Session.get('submissionInfo').grade.score;
+      return this.breakdown.points;
+  },
+  prevScore: function() {
+    var u = Session.get('u');
+    if (u.submission.lastSubmission && u.submission.lastSubmission.grade.score)
+      return u.submission.lastSubmission.grade.score;
+    else
+      return false;
   }
 });
 
@@ -299,17 +332,18 @@ Template.assignmentSubmissions.events({
     /* get the data that was used to render that button, which is
      * the element of the submissions array corresponding to the student's submission for that assignment.
      */
-    Session.set('submissionInfo', Blaze.getData(e.target));
+    Session.set('u', Blaze.getData(e.target));
   },
   'submit #grading': function(e) {
     e.preventDefault();
-    Meteor.call('updateGrade', this.assignment_id, {
+    var sub = Session.get('u').submission;
+    Meteor.call('updateGrade', this.assignment_id, sub._id, {
       score: e.target.percent.value,
       comments: e.target.comments.value,
       timestamp: new Date()
     });
 
-    Session.set('submissionInfo', undefined);
+    Session.set('u', undefined);
 
     return false;
   },
