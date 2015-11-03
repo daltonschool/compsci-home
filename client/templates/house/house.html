@@ -1,22 +1,70 @@
 <template name="house">
   {{title 'View Grades'}}
-  <h3>Viewing grades for {{u.profile.fullname}}</h3>
+  {{#if zoom}}
+    <h3>Viewing {{u.profile.fullname}}'s submission history for "{{getName zoom}}"</h3>
+    <button class="btn btn-default" id="unzoom"><span class="glyphicon glyphicon-arrow-left"></span></button>
+    {{> submissionHistory assignment_id=zoom}}
+    {{else}}
+    <h3>Viewing grades for {{u.profile.fullname}}</h3>
+    <table class="table">
+      <thead>
+      <tr>
+        <td>Assignment</td>
+        <td>Comments</td>
+        <td>Score</td>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each submission}}
+        <tr>
+          <td>
+            <a href="/assignments/{{getAsstUrl assignment}}">{{getName assignment}}</a>
+          </td>
+          <td>
+            {{#if hasBeenGraded grade}}
+            {{#markdown}}{{grade.comments}}{{/markdown}}
+            {{else}}
+              N/A
+            {{/if}}
+          </td>
+          <td>
+            {{#if hasBeenGraded grade}}{{grade.score}}% {{else}} N/A{{/if}}
+          </td>
+          <td>
+            <button class="btn btn-default zoom"><span class="glyphicon glyphicon-zoom-{{#if equal assignment zoom}}out{{else}}in{{/if}}"></span></button>
+          </td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+</template>
+
+<template name="submissionHistory">
   <table class="table">
     <thead>
     <tr>
-      <td>Assignment</td>
+      <td>Date</td>
       <td>Comments</td>
       <td>Score</td>
     </tr>
     </thead>
     <tbody>
-    {{#each submission}}
+    {{#each submissions}}
       <tr>
-        <td><a href="/assignments/{{getAsstUrl assignment}}">{{getName assignment}}</a></td>
-        <td>{{#if hasBeenGraded grade}}
-          {{#markdown}}{{grade.comments}}{{/markdown}}
-        {{else}} N/A{{/if}}</td>
-        <td>{{#if hasBeenGraded grade}}{{grade.score}}% {{else}} N/A{{/if}}</td>
+        <td>
+          {{localeString timestamp}}
+        </td>
+        <td>
+          {{#if hasBeenGraded grade}}
+            {{#markdown}}{{grade.comments}}{{/markdown}}
+          {{else}}
+            N/A
+          {{/if}}
+        </td>
+        <td>
+          {{#if hasBeenGraded grade}}{{grade.score}}% {{else}} N/A{{/if}}
+        </td>
       </tr>
     {{/each}}
     </tbody>

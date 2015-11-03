@@ -45,5 +45,44 @@ Template.house.helpers({
       return Meteor.users.findOne({username: this.u});
     else
       return Meteor.user();
+  },
+  zoom: function() {
+    return Session.get('zoom');
+  },
+  equal: function(a, b) {
+    return a == b;
+  }
+});
+
+Template.house.onRendered(function() {
+  Session.set('zoom', undefined);
+});
+
+Template.house.events({
+  'click .zoom': function(e) {
+    if (Blaze.getData(e.target).assignment == Session.get('zoom'))
+      Session.set('zoom', undefined);
+    else
+      Session.set('zoom', Blaze.getData(e.target).assignment);
+  },
+  'click #unzoom': function() {
+    console.log("unzoom!");
+    Session.set('zoom', undefined);
+  }
+});
+
+Template.submissionHistory.helpers({
+  submissions: function() {
+    var uname = Session.get('username');
+    if (uname === undefined)
+      uname = Meteor.user().username;
+    var assn = this.assignment_id;
+    return Submissions.find({assignment: assn, username: uname}, {sort: [["timestamp", "desc"]]});
+  },
+  hasBeenGraded: function(g) {
+    return g.score !== null;
+  },
+  localeString: function(d) {
+    return d.toLocaleString();
   }
 });
