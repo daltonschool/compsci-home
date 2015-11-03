@@ -43,6 +43,7 @@ Router.route("/assignments/:url", function() {
           name: a.name,
           content: a.history[a.history.length-1].content,
           history: a.history,
+          dueDate: a.dueDate,
           url: a.url,
           _id: a._id
         };

@@ -177,6 +177,12 @@
           <input type="text" name="name">
         {{/if}}
         <br>
+        <label>Due Date: </label>
+        <div class="input-group datetimepicker">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          <input class="set-due-date form-control" value="{{isoString dueDate}}" name="dueDate" type="text"/>
+        </div>
+        <br>
         <label>Starting %</label>
         <input type="number" name="startingPoints" min="0" max="100" value="{{#if oldDoc}}{{gradeBreakdown.points}}{{/if}}">
         <br>
@@ -242,9 +248,13 @@
   <div class="row">
     <hr>
     <div class="col-md-8 col-md-offset-2 assignment_submission">
-      {{#if currentUser}}
-         <h3>Submit Assignment Here</h3>
+      {{#if assignmentOpen}}
+        <h3>Submit Assignment Here</h3>
+        <h6>Open until {{isoString dueDate}}.</h6>
         {{> upload_s3 directory="assignments" assignment_id=_id}}
+
+      {{else}}
+        <h3>Sorry, submissions have been closed for this assignment.</h3>
       {{/if}}
     </div>
   </div>

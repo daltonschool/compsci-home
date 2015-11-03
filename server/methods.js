@@ -47,7 +47,8 @@ Meteor.methods({
             }
           },
           $set: {
-            gradeBreakdown: a.gradeBreakdown
+            gradeBreakdown: a.gradeBreakdown,
+            dueDate: a.dueDate
           }
         });
         return doc;

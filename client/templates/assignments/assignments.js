@@ -137,11 +137,16 @@ Template.adminPanel.events({
   }
 });
 
+Template.assignmentEditor.onRendered(function() {
+  this.$('.datetimepicker').datetimepicker();
+});
+
 Template.assignmentEditor.events({
   'submit .editor': function(e) {
     var assignment = {
       name: e.target.name.value,
       content: e.target.text.value.trim(),
+      dueDate: new Date(e.target.dueDate.value),
       gradeBreakdown: {
         points: e.target.startingPoints.value
       }
@@ -171,6 +176,9 @@ Template.assignmentEditor.helpers({
   },
   files: function() {
     return SiteAssets.find({});
+  },
+  isoString: function(d) {
+    return d.toLocaleString();
   }
 });
 
@@ -199,6 +207,12 @@ Template.assignment.helpers({
   },
   'isOld': function() {
     return Session.get('historyOffset') != 0;
+  },
+  'assignmentOpen': function() {
+    return this.dueDate > new Date();
+  },
+  isoString: function(d) {
+    return d.toLocaleString();
   }
 });
 
