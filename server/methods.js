@@ -191,17 +191,18 @@ Meteor.methods({
     }
   },
 
-  gradeWithoutSubmission: function(assignmentId, score) {
-    if (Meteor.userId()) {
+  gradeWithoutSubmission: function(username, assignmentId, score) {
+    var u = Meteor.users.findOne({username: username});
+    ifAdmin(Meteor.userId(), function() {
       Submissions.insert({
-        user: Meteor.userId(),
-        username: Meteor.user().username,
+        user: u._id,
+        username: username,
         assignment: assignmentId,
         file: null,
         grade: {score: score, comments: "You did not submit for this assignment."},
         timestamp: new Date()
       });
-    }
+    });
   },
 
   updateGrade: function(assignmentId, submission_id, data) {

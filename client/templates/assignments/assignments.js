@@ -384,8 +384,7 @@ Template.assignmentSubmissions.events({
   'submit #noFile_grade': function(e) {
     e.preventDefault();
     var score = parseInt(e.target.percent.value);
-
-    Meteor.call('gradeWithoutSubmission', this.assignment_id, score);
+    Meteor.call('gradeWithoutSubmission', Session.get('u').username, this.assignment_id, score);
     Session.set('u', undefined);
     return false;
   },
