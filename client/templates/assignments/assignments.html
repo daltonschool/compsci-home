@@ -282,7 +282,7 @@
       <ul>
         {{#each submission}}
           {{#if filter}}
-            {{#if hasntGraded submission}}
+            {{#if hasntGraded .}}
               <li>
                 <button class="btn btn-link student" id="{{submission.user}}">
                   {{userNameInfo username 'fullname'}}
