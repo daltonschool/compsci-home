@@ -1,23 +1,24 @@
 <template name="house">
-{{title 'View Grades'}}
-<table class="table">
-  <thead>
-  <tr>
-    <td>Assignment</td>
-    <td>Comments</td>
-    <td>Score</td>
-  </tr>
-  </thead>
-  <tbody>
-  {{#each submission}}
+  {{title 'View Grades'}}
+  <h3>Viewing grades for {{u.profile.fullname}}</h3>
+  <table class="table">
+    <thead>
     <tr>
-      <td><a href="/assignments/{{getAsstUrl assignment}}">{{getName assignment}}</a></td>
-      <td>{{#if hasBeenGraded grade}}
-        {{#markdown}}{{grade.comments}}{{/markdown}}
-      {{else}} N/A{{/if}}</td>
-      <td>{{#if hasBeenGraded grade}}{{grade.score}}% {{else}} N/A{{/if}}</td>
+      <td>Assignment</td>
+      <td>Comments</td>
+      <td>Score</td>
     </tr>
-  {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+    {{#each submission}}
+      <tr>
+        <td><a href="/assignments/{{getAsstUrl assignment}}">{{getName assignment}}</a></td>
+        <td>{{#if hasBeenGraded grade}}
+          {{#markdown}}{{grade.comments}}{{/markdown}}
+        {{else}} N/A{{/if}}</td>
+        <td>{{#if hasBeenGraded grade}}{{grade.score}}% {{else}} N/A{{/if}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
 </template>

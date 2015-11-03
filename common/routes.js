@@ -94,6 +94,17 @@ Router.route("/assignments/:url/submissions", function() {
   }
 });
 
+Router.route('/students/:username', function() {
+  var username = this.params.username;
+  this.render('house', {
+    data: function() {
+      return {
+        u: username
+      }
+    }
+  });
+});
+
 Router.route("/assignments", function() {
   this.render("assignments");
 });
