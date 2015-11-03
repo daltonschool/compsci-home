@@ -33,17 +33,20 @@ Template.assignments.helpers({
       return assnmnts;
     }
   },
+  // TODO: figure out what this function does, and document it.
   update: function() {
     var c = Courses.find().fetch();
     var m = _.max(c, function (n) {
-      return n.feed.length;
+      return n.feed ? n.feed.length : 0;
     });
     var f = [];
-    for (var i = 0; i < m.feed.length; i++) {
-      for (var j = 0; j < c.length; j++) {
-        if (c[j].feed.length >= i) {
-          c[j].feed[i].course = c[j].name;
-          f.push(c[j].feed[i]);
+    if (m.feed) {
+      for (var i = 0; i < m.feed.length; i++) {
+        for (var j = 0; j < c.length; j++) {
+          if (c[j].feed.length >= i) {
+            c[j].feed[i].course = c[j].name;
+            f.push(c[j].feed[i]);
+          }
         }
       }
     }
@@ -376,6 +379,14 @@ Template.assignmentSubmissions.events({
 
     Session.set('u', undefined);
 
+    return false;
+  },
+  'submit #noFile_grade': function(e) {
+    e.preventDefault();
+    var score = parseInt(e.target.percent.value);
+
+    Meteor.call('gradeWithoutSubmission', this.assignment_id, score);
+    Session.set('u', undefined);
     return false;
   },
   'click #filter': function() {
