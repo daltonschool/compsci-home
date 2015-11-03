@@ -4,15 +4,14 @@
 Meteor.subscribe("submissions");
 
 Template.house.onRendered(function() {
-  var uname = this.u;
+  var uname = this.data.u;
+  Session.set('zoom', undefined);
   Session.set('username', uname);
 });
 
 Template.house.helpers({
   submission: function() {
     var uname = Session.get('username');
-    if (uname === undefined)
-      uname = Meteor.user().username;
     // very similar to "submission()" in assignments.js, but we're finding all assignments for a student,
     // instead of all students for an assignment.
     var subs = [];
@@ -54,10 +53,6 @@ Template.house.helpers({
   }
 });
 
-Template.house.onRendered(function() {
-  Session.set('zoom', undefined);
-});
-
 Template.house.events({
   'click .zoom': function(e) {
     if (Blaze.getData(e.target).assignment == Session.get('zoom'))
@@ -66,7 +61,6 @@ Template.house.events({
       Session.set('zoom', Blaze.getData(e.target).assignment);
   },
   'click #unzoom': function() {
-    console.log("unzoom!");
     Session.set('zoom', undefined);
   }
 });
@@ -74,8 +68,6 @@ Template.house.events({
 Template.submissionHistory.helpers({
   submissions: function() {
     var uname = Session.get('username');
-    if (uname === undefined)
-      uname = Meteor.user().username;
     var assn = this.assignment_id;
     return Submissions.find({assignment: assn, username: uname}, {sort: [["timestamp", "desc"]]});
   },

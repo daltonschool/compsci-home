@@ -110,7 +110,13 @@ Router.route("/assignments", function() {
 });
 
 Router.route("/house", function() {
-  this.render('house');
+  this.render('house', {
+    data: function() {
+      return {
+        u: Meteor.user().username
+      }
+    }
+  });
 });
 
 Router.route("/labs", function() {
