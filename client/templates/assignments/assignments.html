@@ -276,14 +276,23 @@
     <div class="col-md-3">
 
       <button class="btn btn-default" id="nosub">
-        {{#if nosub}}Show submissions{{else}}Show students who haven't submitted.{{/if}}
+        {{#if nosub}}Show all users{{else}}Show students who haven't submitted.{{/if}}
       </button>
       {{#if nosub}}{{else}}
       <button class="btn btn-default" id="filter">
-        {{#if filter}}Show all submissions{{else}}Show submissions without a grade{{/if}}
+        {{#if filter}}Show all users{{else}}Show submissions without a grade{{/if}}
       </button>
       {{/if}}
-      <h3>Submissions Recieved</h3>
+
+      {{#if nosub}}
+        <h3>Students who haven't submitted</h3>
+      {{else}}
+        {{#if filter}}
+          <h3>Students who have submitted an assignment and who haven't been graded</h3>
+        {{else}}
+          <h3>All Users</h3>
+        {{/if}}
+      {{/if}}
       <ul>
         {{#each submission}}
           {{#if show .}}
